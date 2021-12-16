@@ -15,6 +15,7 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
     ///     These tests verify that the offsets and dimensions are properly set when user does not explicitly
     ///     set MouseInfoAccessor and SystemCalls, but rely on the default version in DefaultMouseMotionNature
     /// </summary>
+    [Ignore("Don't know how to interpret the Java mockito code here")]
     public class ScreenAdjustedNatureDefaultsTest
     {
         private MouseMotionFactory factory;
@@ -25,7 +26,7 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
         {
             var robot = Substitute.For<IRobot>();
             this.mouse = new MockMouse(60, 60);
-            var mockSystemCalls = new MockSystemCalls(this.mouse, 800, 500);
+            var mockSystemCalls = Substitute.For<MockSystemCalls>(this.mouse, 800, 500);
 
             // TODO: not sure how to port this yet
             /*

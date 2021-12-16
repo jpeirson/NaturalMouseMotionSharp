@@ -5,6 +5,10 @@ namespace NaturalMouseMotionSharp.Support
 
     public class DefaultMouseInfoAccessor : IMouseInfoAccessor
     {
-        public Point GetMousePosition() => TODO;
+        private readonly IRobot robot;
+
+        public DefaultMouseInfoAccessor(IRobot robot) => this.robot = robot;
+
+        public Point GetMousePosition() => this.robot.getMouseLocation();
     }
 }

@@ -17,7 +17,7 @@ namespace NaturalMouseMotionSharp.Support
 
         public void Sleep(long time) => Thread.Sleep(TimeSpan.FromMilliseconds(time));
 
-        public Size GetScreenSize() => Toolkit.getDefaultToolkit().getScreenSize();
+        public Size GetScreenSize() => this.robot.getScreenSize();
 
         /// <summary>Moves the mouse to specified pixel using the provided Robot.</summary>
         /// <remarks>

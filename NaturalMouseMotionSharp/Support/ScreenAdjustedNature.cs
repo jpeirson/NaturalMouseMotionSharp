@@ -13,8 +13,8 @@ namespace NaturalMouseMotionSharp.Support
         private readonly Point offset;
         private readonly Size screenSize;
 
-        public ScreenAdjustedNature(int x, int y, int x2, int y2) :
-            this(new Size(x2 - x, y2 - y), new Point(x, y))
+        public ScreenAdjustedNature(IRobot robot, int x, int y, int x2, int y2) :
+            this(robot, new Size(x2 - x, y2 - y), new Point(x, y))
         {
             if (y2 <= y || x2 <= x)
             {
@@ -22,7 +22,8 @@ namespace NaturalMouseMotionSharp.Support
             }
         }
 
-        public ScreenAdjustedNature(Size screenSize, Point mouseOffset)
+        public ScreenAdjustedNature(IRobot robot, Size screenSize, Point mouseOffset)
+            : base(robot)
         {
             this.screenSize = screenSize;
             this.offset = mouseOffset;

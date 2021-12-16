@@ -18,7 +18,7 @@ namespace NaturalMouseMotionSharp.Tools
         {
             try
             {
-                ValidateMouseMovement(new DefaultSystemCalls(robot), new DefaultMouseInfoAccessor());
+                ValidateMouseMovement(new DefaultSystemCalls(robot), new DefaultMouseInfoAccessor(robot));
             }
             catch (Exception e)
             {

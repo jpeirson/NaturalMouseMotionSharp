@@ -4,6 +4,7 @@ namespace NaturalMouseMotionSharp.Api
     using System.Drawing;
     using System.Threading;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
     using Support;
     using Support.MouseMotion;
     using Util;
@@ -15,7 +16,7 @@ namespace NaturalMouseMotionSharp.Api
     /// </summary>
     public class MouseMotion
     {
-        private static readonly ILogger Log = LoggerFactory.getLogger( /*MouseMotion.class*/);
+        private readonly ILogger log;
         private static readonly int SleepAfterAdjustmentMs = 2;
         private readonly IDeviationProvider deviationProvider;
         private readonly int effectFadeSteps;
@@ -39,8 +40,9 @@ namespace NaturalMouseMotionSharp.Api
         ///<param name="xDest">  the x-coordinate of destination</param>
         ///<param name="yDest">  the y-coordinate of destination</param>
         ///<param name="random"> the random used for unpredictability</param>
-        public MouseMotion(MouseMotionNature nature, Random random, int xDest, int yDest)
+        public MouseMotion(MouseMotionNature nature, Random random, int xDest, int yDest, ILogger log = null)
         {
+            this.log = log ?? NullLogger.Instance;
             this.deviationProvider = nature.DeviationProvider;
             this.noiseProvider = nature.NoiseProvider;
             this.systemCalls = nature.SystemCalls;
@@ -75,7 +77,7 @@ namespace NaturalMouseMotionSharp.Api
         public void Move(MouseMotionObserver observer)
         {
             this.UpdateMouseInfo();
-            Log.LogInformation("Starting to move mouse to ({}, {}), current position: ({}, {})", this.xDest, this.yDest,
+            log.LogInformation("Starting to move mouse to ({}, {}), current position: ({}, {})", this.xDest, this.yDest,
                 this.mousePosition.X, this.mousePosition.Y);
 
             var movementFactory = new MovementFactory(this.xDest, this.yDest, this.speedManager, this.overshootManager,
@@ -90,7 +92,7 @@ namespace NaturalMouseMotionSharp.Api
                     // Then just re-attempt from mouse new position. (There are known JDK bugs, that can cause sending the cursor
                     // to wrong pixel)
                     this.UpdateMouseInfo();
-                    Log.LogWarning("Re-populating movement array. Did not end up on target pixel.");
+                    log.LogWarning("Re-populating movement array. Did not end up on target pixel.");
                     movements = movementFactory.CreateMovements(this.mousePosition);
                 }
 
@@ -98,7 +100,7 @@ namespace NaturalMouseMotionSharp.Api
                 movements.RemoveFirst();
                 if (movements.Count > 0)
                 {
-                    Log.LogDebug("Using overshoots ({} out of {}), aiming at ({}, {})",
+                    log.LogDebug("Using overshoots ({} out of {}), aiming at ({}, {})",
                         overshoots - movements.Count + 1, overshoots, movement.DestX, movement.DestY);
                 }
 
@@ -107,7 +109,7 @@ namespace NaturalMouseMotionSharp.Api
                 var flow = movement.Flow;
                 double xDistance = movement.XDistance;
                 double yDistance = movement.YDistance;
-                Log.LogDebug("Movement arc length computed to {} and time predicted to {} ms", distance,
+                log.LogDebug("Movement arc length computed to {} and time predicted to {} ms", distance,
                     mouseMovementMs);
 
                 /* Number of steps is calculated from the movement time and limited by minimal amount of steps
@@ -147,7 +149,7 @@ namespace NaturalMouseMotionSharp.Api
                     completedYDistance += yStepSize;
                     var completedDistance = MathUtil.Hypot(completedXDistance, completedYDistance);
                     var completion = Math.Min(1, completedDistance / distance);
-                    Log.LogTrace("Step: x: {} y: {} tc: {} c: {}", xStepSize, yStepSize, timeCompletion, completion);
+                    log.LogTrace("Step: x: {} y: {} tc: {} c: {}", xStepSize, yStepSize, timeCompletion, completion);
 
                     var noise = this.noiseProvider.GetNoise(this.random, xStepSize, yStepSize);
                     var deviation = this.deviationProvider.GetDeviation(distance, completion);
@@ -157,8 +159,8 @@ namespace NaturalMouseMotionSharp.Api
                     simulatedMouseX += xStepSize;
                     simulatedMouseY += yStepSize;
 
-                    Log.LogTrace("EffectFadeMultiplier: {}", effectFadeMultiplier);
-                    Log.LogTrace("SimulatedMouse: [{}, {}]", simulatedMouseX, simulatedMouseY);
+                    log.LogTrace("EffectFadeMultiplier: {}", effectFadeMultiplier);
+                    log.LogTrace("SimulatedMouse: [{}, {}]", simulatedMouseX, simulatedMouseY);
 
                     var endTime = startTime + (stepTime * (i + 1));
                     var mousePosX = MathUtil.RoundTowards(
@@ -197,7 +199,7 @@ namespace NaturalMouseMotionSharp.Api
                     // It's possible that mouse is manually moved or for some other reason.
                     // Let's start next step from pre-calculated location to prevent errors from accumulating.
                     // But print warning as this is not expected behavior.
-                    Log.LogWarning("Mouse off from step endpoint (adjustment was done) " +
+                    log.LogWarning("Mouse off from step endpoint (adjustment was done) " +
                                    "x: (" + this.mousePosition.X + " -> " + movement.DestX + ") " +
                                    "y: (" + this.mousePosition.Y + " -> " + movement.DestY + ") "
                     );
@@ -213,10 +215,10 @@ namespace NaturalMouseMotionSharp.Api
                     this.SleepAround(this.reactionTimeBaseMs, this.reactionTimeVariationMs);
                 }
 
-                Log.LogDebug("Steps completed, mouse at " + this.mousePosition.X + " " + this.mousePosition.Y);
+                log.LogDebug("Steps completed, mouse at " + this.mousePosition.X + " " + this.mousePosition.Y);
             }
 
-            Log.LogInformation("Mouse movement to ({}, {}) completed", this.xDest, this.yDest);
+            log.LogInformation("Mouse movement to ({}, {}) completed", this.xDest, this.yDest);
         }
 
 
@@ -227,10 +229,10 @@ namespace NaturalMouseMotionSharp.Api
         private void SleepAround(long sleepMin, long randomPart)
         {
             var sleepTime = sleepMin + (this.random.NextDouble() * randomPart);
-            if (Log.IsEnabled(LogLevel.Trace) && sleepTime > 0)
+            if (log.IsEnabled(LogLevel.Trace) && sleepTime > 0)
             {
                 this.UpdateMouseInfo();
-                Log.LogTrace("Sleeping at ({}, {}) for {} ms", this.mousePosition.X, this.mousePosition.Y, sleepTime);
+                log.LogTrace("Sleeping at ({}, {}) for {} ms", this.mousePosition.X, this.mousePosition.Y, sleepTime);
             }
 
             this.systemCalls.Sleep((long)sleepTime);

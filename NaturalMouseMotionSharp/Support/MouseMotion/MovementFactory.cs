@@ -6,11 +6,12 @@ namespace NaturalMouseMotionSharp.Support.MouseMotion
     using System.Linq;
     using Api;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
     using Util;
 
     public class MovementFactory
     {
-        private static readonly ILogger log = LoggerFactory.getLogger( /*MovementFactory.class*/);
+        private  readonly ILogger log;
         private readonly IOvershootManager overshootManager;
         private readonly Size screenSize;
         private readonly ISpeedManager speedManager;
@@ -18,13 +19,14 @@ namespace NaturalMouseMotionSharp.Support.MouseMotion
         private readonly int yDest;
 
         public MovementFactory(int xDest, int yDest, ISpeedManager speedManager,
-            IOvershootManager overshootManager, Size screenSize)
+            IOvershootManager overshootManager, Size screenSize, ILogger log = null)
         {
             this.xDest = xDest;
             this.yDest = yDest;
             this.speedManager = speedManager;
             this.overshootManager = overshootManager;
             this.screenSize = screenSize;
+            this.log = log ?? NullLogger.Instance;
         }
 
         public LinkedList<Movement> CreateMovements(Point currentMousePosition)

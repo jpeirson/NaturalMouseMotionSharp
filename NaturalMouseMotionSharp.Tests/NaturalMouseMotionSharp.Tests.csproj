@@ -15,4 +15,11 @@
     <ProjectReference Include="..\NaturalMouseMotionSharp\NaturalMouseMotionSharp.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Util\" />
+    <Folder Include="TestUtils\" />
+    <Folder Include="ScreenAdjustedNature\" />
+    <Folder Include="Support\MouseMotion\" />
+  </ItemGroup>
+
 </Project>

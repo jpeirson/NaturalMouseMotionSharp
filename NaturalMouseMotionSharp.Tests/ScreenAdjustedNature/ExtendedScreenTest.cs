@@ -17,7 +17,7 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
         private MockMouse mouse;
 
         [SetUp]
-        public void setup()
+        public void Setup()
         {
             var robot = Substitute.For<IRobot>();
             robot.GetMouseLocation().ThrowsForAnyArgs<NotImplementedException>();
@@ -39,11 +39,11 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
         }
 
         [Test]
-        public void testScreenSizeIsExtended()
+        public void TestScreenSizeIsExtended()
         {
             this.factory.Move(1800, 1500);
 
-            var moves = this.mouse.getMouseMovements();
+            var moves = this.mouse.GetMouseMovements();
             moves[0].Should().Be(new Point(100, 100));
             moves.Last().Should().Be(new Point(1799, 1499));
         }

@@ -13,13 +13,13 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
 
     public class MovementFactoryTest
     {
-        private const double SMALL_DELTA = 0.00000000001;
+        private const double SmallDelta = 0.00000000001;
 
         [Test]
-        public void testSingleMovement()
+        public void TestSingleMovement()
         {
-            var speedManager = this.createConstantSpeedManager(100);
-            var overshootManager = this.createNoOvershootManager();
+            var speedManager = this.CreateConstantSpeedManager(100);
+            var overshootManager = this.CreateNoOvershootManager();
             var factory = new MovementFactory(50, 51, speedManager, overshootManager, new Size(500, 500));
 
             var movements = factory.CreateMovements(new Point(100, 100));
@@ -29,14 +29,14 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             movements.First.Value.Time.Should().Be(100);
             movements.First.Value.XDistance.Should().Be(-50);
             movements.First.Value.YDistance.Should().Be(-49);
-            this.assertArrayEquals(new double[] { 100 }, movements.First.Value.Flow.GetFlowCharacteristics());
+            this.AssertArrayEquals(new double[] { 100 }, movements.First.Value.Flow.GetFlowCharacteristics());
         }
 
         [Test]
-        public void testMultipleMovement()
+        public void TestMultipleMovement()
         {
-            var speedManager = this.createConstantSpeedManager(100);
-            var overshootManager = this.createMultiOvershootManager();
+            var speedManager = this.CreateConstantSpeedManager(100);
+            var overshootManager = this.CreateMultiOvershootManager();
             var factory = new MovementFactory(50, 150, speedManager, overshootManager, new Size(500, 500));
 
             var movements = factory.CreateMovements(new Point(100, 100));
@@ -49,8 +49,8 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             first.Time.Should().Be(100);
             first.XDistance.Should().Be(-45);
             first.YDistance.Should().Be(55);
-            first.Distance.Should().BeApproximately(MathUtil.Hypot(first.XDistance, first.YDistance), SMALL_DELTA);
-            this.assertArrayEquals(new double[] { 100 }, first.Flow.GetFlowCharacteristics());
+            first.Distance.Should().BeApproximately(Hypot(first.XDistance, first.YDistance), SmallDelta);
+            this.AssertArrayEquals(new double[] { 100 }, first.Flow.GetFlowCharacteristics());
 
             var second = movements.First.Value;
             movements.RemoveFirst();
@@ -59,8 +59,8 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             second.Time.Should().Be(50);
             second.XDistance.Should().Be(-10);
             second.YDistance.Should().Be(-10);
-            second.Distance.Should().BeApproximately(MathUtil.Hypot(second.XDistance, second.YDistance), SMALL_DELTA);
-            this.assertArrayEquals(new double[] { 100 }, second.Flow.GetFlowCharacteristics());
+            second.Distance.Should().BeApproximately(Hypot(second.XDistance, second.YDistance), SmallDelta);
+            this.AssertArrayEquals(new double[] { 100 }, second.Flow.GetFlowCharacteristics());
 
 
             var third = movements.First.Value;
@@ -70,15 +70,15 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             third.Time.Should().Be(50);
             third.XDistance.Should().Be(5);
             third.YDistance.Should().Be(5);
-            third.Distance.Should().BeApproximately(MathUtil.Hypot(third.XDistance, third.YDistance), SMALL_DELTA);
-            this.assertArrayEquals(new double[] { 100 }, third.Flow.GetFlowCharacteristics());
+            third.Distance.Should().BeApproximately(Hypot(third.XDistance, third.YDistance), SmallDelta);
+            this.AssertArrayEquals(new double[] { 100 }, third.Flow.GetFlowCharacteristics());
         }
 
         [Test]
-        public void testZeroOffsetOvershootsRemovedFromEnd()
+        public void TestZeroOffsetOvershootsRemovedFromEnd()
         {
-            var speedManager = this.createConstantSpeedManager(64);
-            var overshootManager = this.createOvershootManagerWithZeroOffsets();
+            var speedManager = this.CreateConstantSpeedManager(64);
+            var overshootManager = this.CreateOvershootManagerWithZeroOffsets();
             var factory = new MovementFactory(50, 150, speedManager, overshootManager, new Size(500, 500));
 
             var movements = factory.CreateMovements(new Point(100, 100));
@@ -91,8 +91,8 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             first.Time.Should().Be(64);
             first.XDistance.Should().Be(-45);
             first.YDistance.Should().Be(55);
-            first.Distance.Should().BeApproximately(MathUtil.Hypot(first.XDistance, first.YDistance), SMALL_DELTA);
-            this.assertArrayEquals(new double[] { 100 }, first.Flow.GetFlowCharacteristics());
+            first.Distance.Should().BeApproximately(Hypot(first.XDistance, first.YDistance), SmallDelta);
+            this.AssertArrayEquals(new double[] { 100 }, first.Flow.GetFlowCharacteristics());
 
             // 0-offset in the middle is not removed, this one actually hits destination.
             var second = movements.First.Value;
@@ -102,8 +102,8 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             second.Time.Should().Be(32);
             second.XDistance.Should().Be(-5);
             second.YDistance.Should().Be(-5);
-            second.Distance.Should().BeApproximately(MathUtil.Hypot(second.XDistance, second.YDistance), SMALL_DELTA);
-            this.assertArrayEquals(new double[] { 100 }, second.Flow.GetFlowCharacteristics());
+            second.Distance.Should().BeApproximately(Hypot(second.XDistance, second.YDistance), SmallDelta);
+            this.AssertArrayEquals(new double[] { 100 }, second.Flow.GetFlowCharacteristics());
 
             var third = movements.First.Value;
             movements.RemoveFirst();
@@ -112,8 +112,8 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             third.Time.Should().Be(16);
             third.XDistance.Should().Be(1);
             third.YDistance.Should().Be(1);
-            third.Distance.Should().BeApproximately(MathUtil.Hypot(third.XDistance, third.YDistance), SMALL_DELTA);
-            this.assertArrayEquals(new double[] { 100 }, third.Flow.GetFlowCharacteristics());
+            third.Distance.Should().BeApproximately(Hypot(third.XDistance, third.YDistance), SmallDelta);
+            this.AssertArrayEquals(new double[] { 100 }, third.Flow.GetFlowCharacteristics());
 
             var fourth = movements.First.Value;
             movements.RemoveFirst();
@@ -122,15 +122,15 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             fourth.Time.Should().Be(32);
             fourth.XDistance.Should().Be(-1);
             fourth.YDistance.Should().Be(-1);
-            fourth.Distance.Should().BeApproximately(MathUtil.Hypot(fourth.XDistance, fourth.YDistance), SMALL_DELTA);
-            this.assertArrayEquals(new double[] { 100 }, fourth.Flow.GetFlowCharacteristics());
+            fourth.Distance.Should().BeApproximately(Hypot(fourth.XDistance, fourth.YDistance), SmallDelta);
+            this.AssertArrayEquals(new double[] { 100 }, fourth.Flow.GetFlowCharacteristics());
         }
 
         [Test]
-        public void testZeroOffsetOvershootsRemovedFromEndIfAllZero()
+        public void TestZeroOffsetOvershootsRemovedFromEndIfAllZero()
         {
-            var speedManager = this.createConstantSpeedManager(100);
-            var overshootManager = this.createOvershootManagerWithAllZeroOffsets();
+            var speedManager = this.CreateConstantSpeedManager(100);
+            var overshootManager = this.CreateOvershootManagerWithAllZeroOffsets();
             var factory = new MovementFactory(50, 150, speedManager, overshootManager, new Size(500, 500));
 
             var movements = factory.CreateMovements(new Point(100, 100));
@@ -141,15 +141,15 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             movements.First.Value.Time.Should().Be(50);
             movements.First.Value.XDistance.Should().Be(-50);
             movements.First.Value.YDistance.Should().Be(50);
-            this.assertArrayEquals(new double[] { 100 }, movements.First.Value.Flow.GetFlowCharacteristics());
+            this.AssertArrayEquals(new double[] { 100 }, movements.First.Value.Flow.GetFlowCharacteristics());
         }
 
-        private void assertArrayEquals(double[] expected, double[] actual) =>
+        private void AssertArrayEquals(double[] expected, double[] actual) =>
             actual.Should().Equal(expected, ApproxEqual);
 
-        private static bool ApproxEqual(double x, double y) => Math.Abs(x - y) <= SMALL_DELTA;
+        private static bool ApproxEqual(double x, double y) => Math.Abs(x - y) <= SmallDelta;
 
-        protected ISpeedManager createConstantSpeedManager(long time)
+        protected ISpeedManager CreateConstantSpeedManager(long time)
         {
             var m = Substitute.For<ISpeedManager>();
             m.GetFlowWithTime(Arg.Any<double>())
@@ -157,21 +157,21 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             return m;
         }
 
-        private IOvershootManager createNoOvershootManager() => Substitute.For<IOvershootManager>();
+        private IOvershootManager CreateNoOvershootManager() => Substitute.For<IOvershootManager>();
 
-        private IOvershootManager createMultiOvershootManager()
+        private IOvershootManager CreateMultiOvershootManager()
         {
             Point[] points = { new Point(5, 5), new Point(-5, -5) };
             return CreateOvershootManager(points);
         }
 
-        private IOvershootManager createOvershootManagerWithZeroOffsets()
+        private IOvershootManager CreateOvershootManagerWithZeroOffsets()
         {
             Point[] points = { new Point(5, 5), new Point(0, 0), new Point(1, 1), new Point(0, 0), new Point(0, 0) };
             return CreateOvershootManager(points);
         }
 
-        private IOvershootManager createOvershootManagerWithAllZeroOffsets()
+        private IOvershootManager CreateOvershootManagerWithAllZeroOffsets()
         {
             Point[] points = { new Point(0, 0), new Point(0, 0), new Point(0, 0) };
             return CreateOvershootManager(points);
@@ -192,5 +192,11 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             m.DeriveNextMouseMovementTimeMs(0, 0).ReturnsForAnyArgs(call => call.ArgAt<long>(0) / 2);
             return m;
         }
+
+
+        /// <summary>
+        ///     Helper method to translate Java's <c>Math.hypot</c> to C#.
+        /// </summary>
+        private static double Hypot(double x, double y) => Math.Sqrt((x * x) + (y * y));
     }
 }

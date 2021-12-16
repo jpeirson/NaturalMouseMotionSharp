@@ -7,7 +7,7 @@ namespace NaturalMouseMotionSharp.Support
 
     public class DefaultSpeedManager : ISpeedManager
     {
-        private const double SMALL_DELTA = 10e-6;
+        private const double SmallDelta = 10e-6;
         private readonly List<Flow> flows = new List<Flow>();
 
         public DefaultSpeedManager(ICollection<Flow> flows) => this.flows.AddRange(flows);
@@ -15,11 +15,11 @@ namespace NaturalMouseMotionSharp.Support
         public DefaultSpeedManager() :
             this(new[]
                 {
-                    new Flow(FlowTemplates.constantSpeed()), new Flow(FlowTemplates.variatingFlow()),
-                    new Flow(FlowTemplates.interruptedFlow()), new Flow(FlowTemplates.interruptedFlow2()),
-                    new Flow(FlowTemplates.slowStartupFlow()), new Flow(FlowTemplates.slowStartup2Flow()),
-                    new Flow(FlowTemplates.adjustingFlow()), new Flow(FlowTemplates.jaggedFlow()),
-                    new Flow(FlowTemplates.stoppingFlow())
+                    new Flow(FlowTemplates.ConstantSpeed()), new Flow(FlowTemplates.VariatingFlow()),
+                    new Flow(FlowTemplates.InterruptedFlow()), new Flow(FlowTemplates.InterruptedFlow2()),
+                    new Flow(FlowTemplates.SlowStartupFlow()), new Flow(FlowTemplates.SlowStartup2Flow()),
+                    new Flow(FlowTemplates.AdjustingFlow()), new Flow(FlowTemplates.JaggedFlow()),
+                    new Flow(FlowTemplates.StoppingFlow())
                 }
             )
         {
@@ -37,7 +37,7 @@ namespace NaturalMouseMotionSharp.Support
             var timePerBucket = time / flow.GetFlowCharacteristics().Length;
             foreach (var bucket in flow.GetFlowCharacteristics())
             {
-                if (Math.Abs(bucket - 0) < SMALL_DELTA)
+                if (Math.Abs(bucket - 0) < SmallDelta)
                 {
                     time += timePerBucket;
                 }

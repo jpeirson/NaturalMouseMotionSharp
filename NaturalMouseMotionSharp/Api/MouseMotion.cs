@@ -16,7 +16,7 @@ namespace NaturalMouseMotionSharp.Api
     /// </summary>
     public class MouseMotion
     {
-        private static readonly int SleepAfterAdjustmentMs = 2;
+        private const int SleepAfterAdjustmentMs = 2;
         private readonly IDeviationProvider deviationProvider;
         private readonly int effectFadeSteps;
         private readonly ILogger log;
@@ -35,10 +35,11 @@ namespace NaturalMouseMotionSharp.Api
         private readonly int yDest;
         private Point mousePosition;
 
-        ///<param name="nature"> the nature that defines how mouse is moved</param>
-        ///<param name="xDest">  the x-coordinate of destination</param>
-        ///<param name="yDest">  the y-coordinate of destination</param>
-        ///<param name="random"> the random used for unpredictability</param>
+        /// <param name="nature"> the nature that defines how mouse is moved</param>
+        /// <param name="xDest">  the x-coordinate of destination</param>
+        /// <param name="yDest">  the y-coordinate of destination</param>
+        /// <param name="random"> the random used for unpredictability</param>
+        /// <param name="log"> Optional logger for tracing activity</param>
         public MouseMotion(MouseMotionNature nature, Random random, int xDest, int yDest, ILogger log = null)
         {
             this.log = log ?? NullLogger.Instance;

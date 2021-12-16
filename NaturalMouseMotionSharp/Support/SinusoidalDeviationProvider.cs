@@ -5,7 +5,7 @@ namespace NaturalMouseMotionSharp.Support
 
     public class SinusoidalDeviationProvider : IDeviationProvider
     {
-        public static readonly int DEFAULT_SLOPE_DIVIDER = 10;
+        public const int DefaultSlopeDivider = 10;
         private readonly double slopeDivider;
 
         public SinusoidalDeviationProvider(double slopeDivider) => this.slopeDivider = slopeDivider;

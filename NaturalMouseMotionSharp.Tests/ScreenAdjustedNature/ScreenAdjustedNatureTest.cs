@@ -16,7 +16,7 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
         private MockMouse mouse;
 
         [SetUp]
-        public void setup()
+        public void Setup()
         {
             var robot = Substitute.For<IRobot>();
             this.factory = new MouseMotionFactory(robot);
@@ -35,11 +35,11 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
         }
 
         [Test]
-        public void testOffsetAppliesToMouseMovement()
+        public void TestOffsetAppliesToMouseMovement()
         {
             this.factory.Move(50, 50);
 
-            var moves = this.mouse.getMouseMovements();
+            var moves = this.mouse.GetMouseMovements();
             moves.First().Should().Be(new Point(60, 60));
             moves.Last().Should().Be(new Point(100, 100));
             var lastPos = new Point(0, 0);
@@ -57,7 +57,7 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
             // Arbitrary large movement attempt: (60, 60) -> (1060, 1060)
             this.factory.Move(1000, 1000);
 
-            var moves = this.mouse.getMouseMovements();
+            var moves = this.mouse.GetMouseMovements();
 
             moves.First().Should().Be(new Point(60, 60));
             // Expect the screen size to be only 100x100px, so it gets capped on 150, 150.
@@ -71,7 +71,7 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
             // Try to move out of the specified screen
             this.factory.Move(-1, -1);
 
-            var moves = this.mouse.getMouseMovements();
+            var moves = this.mouse.GetMouseMovements();
             moves.First().Should().Be(new Point(60, 60));
             // Expect the offset to limit the mouse movement to 50, 50
             moves.Last().Should().Be(new Point(50, 50));

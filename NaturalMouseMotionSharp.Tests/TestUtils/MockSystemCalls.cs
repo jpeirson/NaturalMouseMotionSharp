@@ -25,6 +25,6 @@ namespace NaturalMouseMotionSharp.Tests.TestUtils
 
         public Size GetScreenSize() => new Size(this.screenWidth, this.screenHeight);
 
-        public void SetMousePosition(int x, int y) => this.mockMouse.mouseMove(x, y);
+        public void SetMousePosition(int x, int y) => this.mockMouse.MouseMove(x, y);
     }
 }

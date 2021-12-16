@@ -4,7 +4,7 @@ namespace NaturalMouseMotionSharp.Util
 
     public static class FlowTemplates
     {
-        public static double[] variatingFlow() =>
+        public static double[] VariatingFlow() =>
             new double[]
             {
                 10, 13, 14, 19, 16, 13, 15, 22, 56, 90, 97, 97, 66, 51, 50, 66, 91, 95, 87, 96, 98, 88, 70, 62, 57,
@@ -13,7 +13,7 @@ namespace NaturalMouseMotionSharp.Util
                 6, 9, 6, 3, 7, 12, 13, 15, 11, 9, 9, 7, 6, 4, 1, 2, 3, 2, 2, 11, 15, 7, 1, 0, 0, 1
             };
 
-        public static double[] interruptedFlow() =>
+        public static double[] InterruptedFlow() =>
             new double[]
             {
                 12, 11, 10, 20, 24, 19, 26, 15, 9, 9, 10, 24, 26, 30, 24, 49, 72, 60, 81, 113, 82, 99, 67, 10, 7, 7,
@@ -22,7 +22,7 @@ namespace NaturalMouseMotionSharp.Util
                 57, 24, 11, 11, 7, 3, 0, 0, 1, 3, 3, 5, 6, 12, 11, 7, 11, 17, 17, 23
             };
 
-        public static double[] interruptedFlow2() =>
+        public static double[] InterruptedFlow2() =>
             new double[]
             {
                 12, 11, 10, 20, 24, 19, 26, 15, 9, 9, 10, 24, 26, 30, 24, 49, 72, 60, 81, 113, 82, 99, 67, 10, 12,
@@ -32,7 +32,7 @@ namespace NaturalMouseMotionSharp.Util
             };
 
 
-        public static double[] slowStartupFlow() =>
+        public static double[] SlowStartupFlow() =>
             new double[]
             {
                 8, 5, 1, 1, 1, 2, 2, 3, 3, 3, 5, 7, 9, 10, 10, 11, 11, 11, 12, 12, 13, 15, 14, 13, 15, 15, 17, 17,
@@ -42,7 +42,7 @@ namespace NaturalMouseMotionSharp.Util
             };
 
 
-        public static double[] slowStartup2Flow() =>
+        public static double[] SlowStartup2Flow() =>
             new double[]
             {
                 7, 2, 1, 2, 2, 3, 5, 9, 10, 10, 11, 13, 13, 10, 4, 1, 1, 2, 3, 4, 6, 9, 11, 11, 10, 14, 11, 9, 2, 1,
@@ -51,7 +51,7 @@ namespace NaturalMouseMotionSharp.Util
                 81, 108, 91, 88, 74, 46, 19, 46, 84, 35, 14, 19, 12, 13, 18, 38, 35, 11, 4
             };
 
-        public static double[] jaggedFlow() =>
+        public static double[] JaggedFlow() =>
             new double[]
             {
                 52, 106, 122, 8, 6, 117, 32, 2, 68, 34, 21, 81, 61, 86, 55, 4, 104, 21, 51, 8, 93, 90, 43, 65, 82,
@@ -61,7 +61,7 @@ namespace NaturalMouseMotionSharp.Util
                 101, 122, 19
             };
 
-        public static double[] stoppingFlow() =>
+        public static double[] StoppingFlow() =>
             new double[]
             {
                 8, 20, 39, 48, 66, 71, 79, 57, 29, 5, 2, 3, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3,
@@ -70,14 +70,14 @@ namespace NaturalMouseMotionSharp.Util
                 65, 51, 57, 54, 61, 46, 38, 16
             };
 
-        public static double[] adjustingFlow() =>
+        public static double[] AdjustingFlow() =>
             new double[]
             {
                 1, 1, 1, 3, 8, 7, 2, 2, 4, 8, 6, 3, 7, 13, 18, 19, 24, 35, 26, 14, 31, 43, 49, 55, 61, 67, 61, 50,
                 43, 37, 30, 16, 5, 4, 4, 3, 3, 3, 4, 4, 3, 2, 2, 3, 10, 14, 10, 7, 5, 5
             };
 
-        public static double[] random()
+        public static double[] Random()
         {
             var result = new double[100];
             for (var i = 0; i < result.Length; i++)
@@ -88,7 +88,7 @@ namespace NaturalMouseMotionSharp.Util
             return result;
         }
 
-        public static double[] constantSpeed()
+        public static double[] ConstantSpeed()
         {
             var flowBuckets = Enumerable.Repeat(100.0, 10).ToArray();
             return flowBuckets;

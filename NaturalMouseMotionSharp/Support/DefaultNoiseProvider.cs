@@ -6,8 +6,8 @@ namespace NaturalMouseMotionSharp.Support
 
     public class DefaultNoiseProvider : INoiseProvider
     {
-        public const double DEFAULT_NOISINESS_DIVIDER = 2;
-        private const double SMALL_DELTA = 10e-6;
+        public const double DefaultNoisinessDivider = 2;
+        private const double SmallDelta = 10e-6;
         private readonly double noisinessDivider;
 
         /// <param name="noisinessDivider">bigger value means less noise.</param>
@@ -15,7 +15,7 @@ namespace NaturalMouseMotionSharp.Support
 
         public DoublePoint GetNoise(Random random, double xStepSize, double yStepSize)
         {
-            if (Math.Abs(xStepSize - 0) < SMALL_DELTA && Math.Abs(yStepSize - 0) < SMALL_DELTA)
+            if (Math.Abs(xStepSize - 0) < SmallDelta && Math.Abs(yStepSize - 0) < SmallDelta)
             {
                 return DoublePoint.Zero;
             }

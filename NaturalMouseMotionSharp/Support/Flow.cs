@@ -31,7 +31,7 @@ namespace NaturalMouseMotionSharp.Support
         /// <returns>the normalized bucket array</returns>
         private double[] NormalizeBuckets(double[] flowCharacteristics)
         {
-            var buckets = new double[flowCharacteristics.Length];
+            var vBuckets = new double[flowCharacteristics.Length];
             long sum = 0;
             for (var i = 0; i < flowCharacteristics.Length; i++)
             {
@@ -58,13 +58,13 @@ namespace NaturalMouseMotionSharp.Support
              * buckets array should have and we multiply all characteristics values by 0.5, this preserves the
              * characteristics, but reduces the values to levels our algorithm knows how to work with.
              */
-            var multiplier = (double)AverageBucketValue * buckets.Length / sum;
+            var multiplier = (double)AverageBucketValue * vBuckets.Length / sum;
             for (var i = 0; i < flowCharacteristics.Length; i++)
             {
-                buckets[i] = flowCharacteristics[i] * multiplier;
+                vBuckets[i] = flowCharacteristics[i] * multiplier;
             }
 
-            return buckets;
+            return vBuckets;
         }
 
         public double[] GetFlowCharacteristics() => this.buckets;

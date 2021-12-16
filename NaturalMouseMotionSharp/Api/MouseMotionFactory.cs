@@ -81,6 +81,7 @@ namespace NaturalMouseMotionSharp.Api
         /// <summary>Builds the <see cref="MouseMotion" />, which can be executed instantly or saved for later.</summary>
         /// <param name="xDest">the end position x-coordinate for the mouse</param>
         /// <param name="yDest">the end position y-coordinate for the mouse</param>
+        /// <param name="log"> Optional logger for tracing activity</param>
         /// <returns>the <see cref="MouseMotion" /> which can be executed instantly or saved for later.</returns>
         /// <remarks>
         ///     (Mouse will be moved from its current position, not from the position
@@ -92,6 +93,7 @@ namespace NaturalMouseMotionSharp.Api
         /// <summary>Start moving the mouse to specified location. Blocks until done.</summary>
         /// <param name="xDest">the end position x-coordinate for the mouse</param>
         /// <param name="yDest">the end position y-coordinate for the mouse</param>
+        /// <param name="log"> Optional logger for tracing activity</param>
         /// <exception cref="ThreadInterruptedException">if something interrupts the thread.</exception>
         public void Move(int xDest, int yDest, ILogger log = null) => this.Build(xDest, yDest, log).Move();
     }

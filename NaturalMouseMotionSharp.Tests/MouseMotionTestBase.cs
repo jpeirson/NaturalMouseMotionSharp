@@ -10,9 +10,9 @@ namespace NaturalMouseMotionSharp.Tests
 
     public class MouseMotionTestBase
     {
-        protected static readonly double SMALL_DELTA = 0.000001;
-        protected static readonly int SCREEN_WIDTH = 800;
-        protected static readonly int SCREEN_HEIGHT = 500;
+        protected const double SmallDelta = 0.000001;
+        protected const int ScreenWidth = 800;
+        protected const int ScreenHeight = 500;
         protected IDeviationProvider deviationProvider;
         protected MouseMotionFactory factory;
         protected MockMouse mouse;
@@ -22,13 +22,13 @@ namespace NaturalMouseMotionSharp.Tests
         protected ISystemCalls systemCalls;
 
         [SetUp]
-        public void setup()
+        public void Setup()
         {
             var mockRobot = Substitute.For<IRobot>();
 
             this.mouse = new MockMouse();
             this.factory = new MouseMotionFactory(mockRobot);
-            this.systemCalls = new MockSystemCalls(this.mouse, SCREEN_WIDTH, SCREEN_HEIGHT);
+            this.systemCalls = new MockSystemCalls(this.mouse, ScreenWidth, ScreenHeight);
             this.deviationProvider = Substitute.For<IDeviationProvider>();
             this.noiseProvider = Substitute.For<INoiseProvider>();
             this.speedManager = new MockSpeedManager();
@@ -42,7 +42,7 @@ namespace NaturalMouseMotionSharp.Tests
             this.factory.MouseInfo = this.mouse;
         }
 
-        protected void assertMousePosition(int x, int y)
+        protected void AssertMousePosition(int x, int y)
         {
             var pos = this.mouse.GetMousePosition();
             pos.X.Should().Be(x);

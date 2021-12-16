@@ -5,11 +5,11 @@ namespace NaturalMouseMotionSharp.Support
 
     public class DefaultMouseMotionNature : MouseMotionNature
     {
-        public const int TIME_TO_STEPS_DIVIDER = 8;
-        public const int MIN_STEPS = 10;
-        public const int EFFECT_FADE_STEPS = 15;
-        public const int REACTION_TIME_BASE_MS = 20;
-        public const int REACTION_TIME_VARIATION_MS = 120;
+        public const int DefaultTimeToStepsDivider = 8;
+        public const int DefaultMinSteps = 10;
+        public const int DefaultEffectFadeSteps = 15;
+        public const int DefaultReactionTimeBaseMs = 20;
+        public const int DefaultReactionTimeVariationMs = 120;
 
         public DefaultMouseMotionNature(IRobot robot, ISystemCalls systemCalls) :
             this(systemCalls, new DefaultMouseInfoAccessor(robot))
@@ -25,16 +25,16 @@ namespace NaturalMouseMotionSharp.Support
         public DefaultMouseMotionNature(ISystemCalls systemCalls, IMouseInfoAccessor mouseInfoAccessor)
         {
             this.SystemCalls = systemCalls;
-            this.DeviationProvider = new SinusoidalDeviationProvider(SinusoidalDeviationProvider.DEFAULT_SLOPE_DIVIDER);
-            this.NoiseProvider = new DefaultNoiseProvider(DefaultNoiseProvider.DEFAULT_NOISINESS_DIVIDER);
+            this.DeviationProvider = new SinusoidalDeviationProvider(SinusoidalDeviationProvider.DefaultSlopeDivider);
+            this.NoiseProvider = new DefaultNoiseProvider(DefaultNoiseProvider.DefaultNoisinessDivider);
             this.SpeedManager = new DefaultSpeedManager();
             this.OvershootManager = new DefaultOvershootManager(new Random());
-            this.EffectFadeSteps = EFFECT_FADE_STEPS;
-            this.MinSteps = MIN_STEPS;
+            this.EffectFadeSteps = DefaultEffectFadeSteps;
+            this.MinSteps = DefaultMinSteps;
             this.MouseInfo = mouseInfoAccessor;
-            this.ReactionTimeBaseMs = REACTION_TIME_BASE_MS;
-            this.ReactionTimeVariationMs = REACTION_TIME_VARIATION_MS;
-            this.TimeToStepsDivider = TIME_TO_STEPS_DIVIDER;
+            this.ReactionTimeBaseMs = DefaultReactionTimeBaseMs;
+            this.ReactionTimeVariationMs = DefaultReactionTimeVariationMs;
+            this.TimeToStepsDivider = DefaultTimeToStepsDivider;
         }
 
         public DefaultMouseMotionNature(IRobot robot) :

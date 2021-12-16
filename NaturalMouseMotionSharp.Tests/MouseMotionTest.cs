@@ -4,19 +4,18 @@ namespace NaturalMouseMotionSharp.Tests
     using FluentAssertions;
     using NaturalMouseMotionSharp.Support;
     using NUnit.Framework;
-    using Support;
 
     public class MouseMotionTest : MouseMotionTestBase
     {
         [Test]
-        public void linearMotionNoOvershoots()
+        public void LinearMotionNoOvershoots()
         {
-            this.assertMousePosition(0, 0);
+            this.AssertMousePosition(0, 0);
             ((DefaultOvershootManager)this.factory.OvershootManager).Overshoots = 0;
             this.factory.Move(50, 50);
-            this.assertMousePosition(50, 50);
+            this.AssertMousePosition(50, 50);
 
-            var points = this.mouse.getMouseMovements();
+            var points = this.mouse.GetMouseMovements();
             // The chosen 5 is 'good enough value' for 0,0 -> 50,50 for this test. we don't expect it to
             // be any certain value, because it can be changed in the future how the implementation actually works,
             // but based on gut feeling anything below 5 is too low.
@@ -36,16 +35,16 @@ namespace NaturalMouseMotionSharp.Tests
         [Test]
         public void cantMoveOutOfScreenToNegative_noOverShoots()
         {
-            this.assertMousePosition(0, 0);
+            this.AssertMousePosition(0, 0);
             ((DefaultOvershootManager)this.factory.OvershootManager).Overshoots = 0;
             this.factory.Move(-50, -50);
 
-            var points = this.mouse.getMouseMovements();
+            var points = this.mouse.GetMouseMovements();
             foreach (var p in points)
             {
                 p.X.Should().BeGreaterOrEqualTo(0);
                 p.Y.Should().BeGreaterOrEqualTo(0);
-                this.assertMousePosition(0, 0);
+                this.AssertMousePosition(0, 0);
             }
         }
 
@@ -53,36 +52,36 @@ namespace NaturalMouseMotionSharp.Tests
         public void cantMoveUpToScreenWidth_noOvershoots()
         {
             // This helps to make sure that the test detects if used height instead of width or vice versa in implementation
-            SCREEN_HEIGHT.Should().NotBe(SCREEN_WIDTH);
+            ScreenHeight.Should().NotBe(ScreenWidth);
 
-            this.assertMousePosition(0, 0);
+            this.AssertMousePosition(0, 0);
             ((DefaultOvershootManager)this.factory.OvershootManager).Overshoots = 0;
-            this.factory.Move(SCREEN_WIDTH + 100, SCREEN_HEIGHT - 100);
+            this.factory.Move(ScreenWidth + 100, ScreenHeight - 100);
 
-            var points = this.mouse.getMouseMovements();
+            var points = this.mouse.GetMouseMovements();
             foreach (var p in points)
             {
-                p.X.Should().BeLessThan(SCREEN_WIDTH);
+                p.X.Should().BeLessThan(ScreenWidth);
             }
 
-            this.assertMousePosition(SCREEN_WIDTH - 1, SCREEN_HEIGHT - 100);
+            this.AssertMousePosition(ScreenWidth - 1, ScreenHeight - 100);
         }
 
         [Test]
         public void cantMoveUpToScreenWidth_withOvershoots()
         {
             // This helps to make sure that the test detects if used height instead of width or vice versa in implementation
-            SCREEN_HEIGHT.Should().NotBe(SCREEN_WIDTH);
+            ScreenHeight.Should().NotBe(ScreenWidth);
 
-            this.assertMousePosition(0, 0);
+            this.AssertMousePosition(0, 0);
             ((DefaultOvershootManager)this.factory.OvershootManager).Overshoots = 100;
-            this.factory.Move(SCREEN_WIDTH - 1, SCREEN_HEIGHT - 100);
+            this.factory.Move(ScreenWidth - 1, ScreenHeight - 100);
 
-            var points = this.mouse.getMouseMovements();
+            var points = this.mouse.GetMouseMovements();
             foreach (var p in points)
             {
-                p.X.Should().BeLessThan(SCREEN_WIDTH);
-                this.assertMousePosition(SCREEN_WIDTH - 1, SCREEN_HEIGHT - 100);
+                p.X.Should().BeLessThan(ScreenWidth);
+                this.AssertMousePosition(ScreenWidth - 1, ScreenHeight - 100);
             }
         }
 
@@ -90,17 +89,17 @@ namespace NaturalMouseMotionSharp.Tests
         public void cantMoveUpToScreenHeight_noOvershoots()
         {
             // This helps to make sure that the test detects if used height instead of width or vice versa in implementation
-            SCREEN_HEIGHT.Should().NotBe(SCREEN_WIDTH);
+            ScreenHeight.Should().NotBe(ScreenWidth);
 
-            this.assertMousePosition(0, 0);
+            this.AssertMousePosition(0, 0);
             ((DefaultOvershootManager)this.factory.OvershootManager).Overshoots = 0;
-            this.factory.Move(SCREEN_WIDTH - 100, SCREEN_HEIGHT + 100);
+            this.factory.Move(ScreenWidth - 100, ScreenHeight + 100);
 
-            var points = this.mouse.getMouseMovements();
+            var points = this.mouse.GetMouseMovements();
             foreach (var p in points)
             {
-                p.Y.Should().BeLessThan(SCREEN_HEIGHT);
-                this.assertMousePosition(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 1);
+                p.Y.Should().BeLessThan(ScreenHeight);
+                this.AssertMousePosition(ScreenWidth - 100, ScreenHeight - 1);
             }
         }
 
@@ -108,17 +107,17 @@ namespace NaturalMouseMotionSharp.Tests
         public void cantMoveUpToScreenHeight_withOvershoots()
         {
             // This helps to make sure that the test detects if used height instead of width or vice versa in implementation
-            SCREEN_HEIGHT.Should().NotBe(SCREEN_WIDTH);
+            ScreenHeight.Should().NotBe(ScreenWidth);
 
-            this.assertMousePosition(0, 0);
+            this.AssertMousePosition(0, 0);
             ((DefaultOvershootManager)this.factory.OvershootManager).Overshoots = 100;
-            this.factory.Move(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 1);
+            this.factory.Move(ScreenWidth - 100, ScreenHeight - 1);
 
-            var points = this.mouse.getMouseMovements();
+            var points = this.mouse.GetMouseMovements();
             foreach (var p in points)
             {
-                p.Y.Should().BeLessThan(SCREEN_HEIGHT);
-                this.assertMousePosition(SCREEN_WIDTH - 100, SCREEN_HEIGHT - 1);
+                p.Y.Should().BeLessThan(ScreenHeight);
+                this.AssertMousePosition(ScreenWidth - 100, ScreenHeight - 1);
             }
         }
 
@@ -126,21 +125,21 @@ namespace NaturalMouseMotionSharp.Tests
         public void cantMoveOutOfScreenToNegative_withOverShoots()
         {
             // setup mouse to 50,50
-            this.mouse.mouseMove(50, 50);
-            this.assertMousePosition(50, 50);
+            this.mouse.MouseMove(50, 50);
+            this.AssertMousePosition(50, 50);
 
             // Moving mouse to 0,0 with large amount of overshoots, so it would be likely to hit negative if possible.
             ((DefaultOvershootManager)this.factory.OvershootManager).Overshoots = 100;
             this.factory.Move(0, 0);
 
-            var points = this.mouse.getMouseMovements();
+            var points = this.mouse.GetMouseMovements();
             foreach (var p in points)
             {
                 p.X.Should().BeGreaterOrEqualTo(0);
                 p.Y.Should().BeGreaterOrEqualTo(0);
             }
 
-            this.assertMousePosition(0, 0);
+            this.AssertMousePosition(0, 0);
         }
     }
 }

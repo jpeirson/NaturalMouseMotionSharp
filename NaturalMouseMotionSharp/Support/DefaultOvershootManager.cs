@@ -7,24 +7,24 @@ namespace NaturalMouseMotionSharp.Support
 
     public class DefaultOvershootManager : IOvershootManager
     {
-        public const double OVERSHOOT_SPEEDUP_DIVIDER = 1.8;
-        public const int MIN_OVERSHOOT_MOVEMENT_MS = 40;
-        public const int OVERSHOOT_RANDOM_MODIFIER_DIVIDER = 20;
-        public const int MIN_DISTANCE_FOR_OVERSHOOTS = 10;
-        public const int DEFAULT_OVERSHOOT_AMOUNT = 3;
+        public const double DefaultOvershootSpeedupDivider = 1.8;
+        public const int DefaultMinOvershootMovementMs = 40;
+        public const int DefaultOvershootRandomModifierDivider = 20;
+        public const int DefaultMinDistanceForOvershoots = 10;
+        public const int DefaultOvershootAmount = 3;
         private readonly Random random;
 
         public DefaultOvershootManager(Random random) => this.random = random;
 
-        public long MinDistanceForOvershoots { get; set; } = MIN_DISTANCE_FOR_OVERSHOOTS;
+        public long MinDistanceForOvershoots { get; set; } = DefaultMinDistanceForOvershoots;
 
-        public long MinOvershootMovementMs { get; set; } = MIN_OVERSHOOT_MOVEMENT_MS;
+        public long MinOvershootMovementMs { get; set; } = DefaultMinOvershootMovementMs;
 
-        public double OvershootRandomModifierDivider { get; set; } = OVERSHOOT_RANDOM_MODIFIER_DIVIDER;
+        public double OvershootRandomModifierDivider { get; set; } = DefaultOvershootRandomModifierDivider;
 
-        public int Overshoots { get; set; } = DEFAULT_OVERSHOOT_AMOUNT;
+        public int Overshoots { get; set; } = DefaultOvershootAmount;
 
-        public double OvershootSpeedupDivider { get; set; } = OVERSHOOT_SPEEDUP_DIVIDER;
+        public double OvershootSpeedupDivider { get; set; } = DefaultOvershootSpeedupDivider;
 
         public int GetOvershoots(Flow flow, long mouseMovementMs, double distance)
         {

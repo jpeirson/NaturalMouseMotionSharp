@@ -4,7 +4,6 @@ namespace NaturalMouseMotionSharp.Tests
     using FluentAssertions;
     using NaturalMouseMotionSharp.Support;
     using NUnit.Framework;
-    using Support;
 
     public class FlowTest
     {

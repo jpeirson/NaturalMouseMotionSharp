@@ -8,7 +8,7 @@ namespace NaturalMouseMotionSharp.Tests
 
     public class FlowUtilTest
     {
-        private static readonly double SMALL_DELTA = 10e-6;
+        private static readonly double SmallDelta = 10e-6;
 
         [Test]
         public void testStretchFlow_3to9()
@@ -19,7 +19,7 @@ namespace NaturalMouseMotionSharp.Tests
                 new[] { 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0 }, ApproxEqual
             );
 
-            this.assertArraySum(this.average(flow) * 9, result);
+            this.AssertArraySum(this.Average(flow) * 9, result);
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace NaturalMouseMotionSharp.Tests
                 new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1 }, ApproxEqual
             );
 
-            this.assertArraySum(this.average(flow) * 9, result);
+            this.AssertArraySum(this.Average(flow) * 9, result);
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace NaturalMouseMotionSharp.Tests
                 new[] { 1.0, 1.5, 2.0, 2.5, 3 }, ApproxEqual
             );
 
-            this.assertArraySum(this.average(flow) * 5, result);
+            this.AssertArraySum(this.Average(flow) * 5, result);
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace NaturalMouseMotionSharp.Tests
                 new[] { 2.0, 3.0, 4.0, 5.0, 6.0 }, ApproxEqual
             );
 
-            this.assertArraySum(this.average(flow) * 2 * 5, result);
+            this.AssertArraySum(this.Average(flow) * 2 * 5, result);
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace NaturalMouseMotionSharp.Tests
                 new[] { 1.0, 1.125, 1.25, 1.375, 1.5, 1.625, 1.75, 1.875, 2.0 }, ApproxEqual
             );
 
-            this.assertArraySum(this.average(flow) * 9, result);
+            this.AssertArraySum(this.Average(flow) * 9, result);
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace NaturalMouseMotionSharp.Tests
             result.Should().Equal(
                 new[] { 1.0, 1.142857, 1.285714, 1.428571, 1.571428, 1.714285, 1.857142, 2.0 }, ApproxEqual);
 
-            this.assertArraySum(this.average(flow) * 8, result);
+            this.AssertArraySum(this.Average(flow) * 8, result);
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace NaturalMouseMotionSharp.Tests
             result.Should().Equal(
                 new[] { 1.047619, 1.428571, 1.809523, 2.190476, 2.571428, 2.952380 }, ApproxEqual);
 
-            this.assertArraySum(this.average(flow) * 6, result);
+            this.AssertArraySum(this.Average(flow) * 6, result);
         }
 
 
@@ -118,7 +118,7 @@ namespace NaturalMouseMotionSharp.Tests
                     1.205591, 1.216989, 1.229032, 1.240215, 1.251397, 1.263225, 1.274838, 1.286021, 1.297204
                 }, ApproxEqual);
 
-            this.assertArraySum(this.average(flow) * 18, result);
+            this.AssertArraySum(this.Average(flow) * 18, result);
         }
 
 
@@ -131,7 +131,7 @@ namespace NaturalMouseMotionSharp.Tests
                 new[] { 1.2, 2, 2.8 }, ApproxEqual
             );
 
-            this.assertArraySum(this.average(flow) * 3, result);
+            this.AssertArraySum(this.Average(flow) * 3, result);
         }
 
         [Test]
@@ -143,7 +143,7 @@ namespace NaturalMouseMotionSharp.Tests
                 new[] { 4.6, 3.0, 1.4 }, ApproxEqual
             );
 
-            this.assertArraySum(this.average(flow) * 3, result);
+            this.AssertArraySum(this.Average(flow) * 3, result);
         }
 
         [Test]
@@ -155,14 +155,14 @@ namespace NaturalMouseMotionSharp.Tests
                 new[] { 3.0 }, ApproxEqual
             );
 
-            this.assertArraySum(this.average(flow) * 1, result);
+            this.AssertArraySum(this.Average(flow) * 1, result);
         }
 
-        private void assertArraySum(double expected, double[] actual) =>
-            actual.Sum().Should().BeApproximately(expected, SMALL_DELTA);
+        private void AssertArraySum(double expected, double[] actual) =>
+            actual.Sum().Should().BeApproximately(expected, SmallDelta);
 
-        private double average(double[] array) => array.Average();
+        private double Average(double[] array) => array.Average();
 
-        private static bool ApproxEqual(double x, double y) => Math.Abs(x - y) <= SMALL_DELTA;
+        private static bool ApproxEqual(double x, double y) => Math.Abs(x - y) <= SmallDelta;
     }
 }

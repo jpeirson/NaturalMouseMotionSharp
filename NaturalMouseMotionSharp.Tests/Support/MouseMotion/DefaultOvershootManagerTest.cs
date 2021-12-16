@@ -10,7 +10,7 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
     public class DefaultOvershootManagerTest
     {
         [Test]
-        public void returnsSetOvershootNumber()
+        public void ReturnsSetOvershootNumber()
         {
             Random random = new MockRandom(new[] { 0.1, 0.2, 0.3, 0.4, 0.5 });
             var manager = new DefaultOvershootManager(random);
@@ -24,7 +24,7 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
         }
 
         [Test]
-        public void overshootSizeDecreasesWithOvershootsRemaining()
+        public void OvershootSizeDecreasesWithOvershootsRemaining()
         {
             Point overshoot1;
             Point overshoot2;
@@ -61,7 +61,7 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
             {
                 // DEFAULT VALUE
                 var nextTime = manager.DeriveNextMouseMovementTimeMs(
-                    (long)(DefaultOvershootManager.OVERSHOOT_SPEEDUP_DIVIDER * 500), 3
+                    (long)(DefaultOvershootManager.DefaultOvershootSpeedupDivider * 500), 3
                 );
                 nextTime.Should().Be(500);
             }
@@ -80,7 +80,7 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
         }
 
         [Test]
-        public void nextMouseMovementTimeHasMinValue()
+        public void NextMouseMovementTimeHasMinValue()
         {
             Random random = new MockRandom(new[] { 0.1, 0.2, 0.3, 0.4, 0.5 });
             var manager = new DefaultOvershootManager(random);

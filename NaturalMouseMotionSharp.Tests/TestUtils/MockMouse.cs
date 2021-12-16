@@ -18,9 +18,9 @@ namespace NaturalMouseMotionSharp.Tests.TestUtils
         public Point GetMousePosition() => this.mouseMovements.Last();
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public void mouseMove(int x, int y) => this.mouseMovements.Add(new Point(x, y));
+        public void MouseMove(int x, int y) => this.mouseMovements.Add(new Point(x, y));
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public List<Point> getMouseMovements() => new List<Point>(this.mouseMovements);
+        public List<Point> GetMouseMovements() => new List<Point>(this.mouseMovements);
     }
 }

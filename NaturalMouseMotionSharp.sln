@@ -11,9 +11,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Root", "_Root", "{97A8E061
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaturalMouseMotionSharp", "NaturalMouseMotionSharp\NaturalMouseMotionSharp.csproj", "{57269179-8191-42EE-9665-8B88BD21B4C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NaturalMouseMotionSharp", "NaturalMouseMotionSharp\NaturalMouseMotionSharp.csproj", "{57269179-8191-42EE-9665-8B88BD21B4C1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NaturalMouseMotionSharp.Tests", "NaturalMouseMotionSharp.Tests\NaturalMouseMotionSharp.Tests.csproj", "{FDB9F7C8-1E4C-48BA-AAE0-F19DE3C37DCD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_GitHub", "_GitHub", "{2C7A841C-7E31-47AC-BCCD-DFEB879CD3B6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{F89350A1-8731-4147-ADE9-547F1952AC70}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +39,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F89350A1-8731-4147-ADE9-547F1952AC70} = {2C7A841C-7E31-47AC-BCCD-DFEB879CD3B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {57DAF9B9-B497-4118-9717-B5CA49C31AEE}

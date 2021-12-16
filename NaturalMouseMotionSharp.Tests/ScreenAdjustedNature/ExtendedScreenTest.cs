@@ -1,12 +1,13 @@
 namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
 {
+    using System;
     using System.Drawing;
     using System.Linq;
     using Api;
     using FluentAssertions;
     using NaturalMouseMotionSharp.Support;
-    using NaturalMouseMotionSharp.Util;
     using NSubstitute;
+    using NSubstitute.ExceptionExtensions;
     using NUnit.Framework;
     using TestUtils;
 
@@ -19,17 +20,20 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
         public void setup()
         {
             var robot = Substitute.For<IRobot>();
-            this.factory = new MouseMotionFactory(robot);
-            this.factory.Nature = new ScreenAdjustedNature(robot, new Size(1800, 1500), new Point(0, 0));
+            robot.GetMouseLocation().ThrowsForAnyArgs<NotImplementedException>();
+            robot.GetScreenSize().ThrowsForAnyArgs<NotImplementedException>();
+            robot.WhenForAnyArgs(x => x.MouseMove(0, 0)).Do(_ => throw new NotImplementedException());
+
+            this.factory = new MouseMotionFactory(robot)
+            {
+                Nature = new ScreenAdjustedNature(robot, new Size(1800, 1500), new Point(0, 0))
+            };
             ((DefaultOvershootManager)this.factory.OvershootManager).Overshoots = 0;
             this.mouse = new MockMouse(100, 100);
             this.factory.SystemCalls = new MockSystemCalls(this.mouse, 800, 500);
             this.factory.NoiseProvider = Substitute.For<INoiseProvider>();
             this.factory.DeviationProvider = Substitute.For<IDeviationProvider>();
-            var mockSpeedManager = Substitute.For<ISpeedManager>();
-            mockSpeedManager.GetFlowWithTime(Arg.Any<double>())
-                .Returns(_ => new Pair<Flow, long>(new Flow(new[] { 100.0 }), 10));
-            this.factory.SpeedManager = mockSpeedManager;
+            this.factory.SpeedManager = new MockSpeedManager();
             this.factory.Random = new MockRandom(new[] { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1 });
             this.factory.MouseInfo = this.mouse;
         }

@@ -1,11 +1,9 @@
 namespace NaturalMouseMotionSharp.Tests
 {
     using System;
-    using System.Drawing;
     using Api;
     using FluentAssertions;
     using NaturalMouseMotionSharp.Support;
-    using NaturalMouseMotionSharp.Util;
     using NSubstitute;
     using NUnit.Framework;
     using TestUtils;
@@ -27,24 +25,14 @@ namespace NaturalMouseMotionSharp.Tests
         public void setup()
         {
             var mockRobot = Substitute.For<IRobot>();
-            var mockMouse = new MockMouse();
-            var mockSystemCalls = new MockSystemCalls(mockMouse, SCREEN_WIDTH, SCREEN_HEIGHT);
-            var mockDeviationProvider = Substitute.For<IDeviationProvider>();
-            var mockNoiseProvider = Substitute.For<INoiseProvider>();
 
-            var mockSpeedManager = Substitute.For<ISpeedManager>();
-            mockSpeedManager.GetFlowWithTime(Arg.Any<double>())
-                .Returns(_ => new Pair<Flow, long>(new Flow(new[] { 100.0 }), 10));
-
-            var mockRandom = new MockRandom(new[] { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1 });
-
-            this.mouse = mockMouse;
+            this.mouse = new MockMouse();
             this.factory = new MouseMotionFactory(mockRobot);
-            this.systemCalls = mockSystemCalls;
-            this.deviationProvider = mockDeviationProvider;
-            this.noiseProvider = mockNoiseProvider;
-            this.speedManager = mockSpeedManager;
-            this.random = mockRandom;
+            this.systemCalls = new MockSystemCalls(this.mouse, SCREEN_WIDTH, SCREEN_HEIGHT);
+            this.deviationProvider = Substitute.For<IDeviationProvider>();
+            this.noiseProvider = Substitute.For<INoiseProvider>();
+            this.speedManager = new MockSpeedManager();
+            this.random = new MockRandom(new[] { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1 });
 
             this.factory.SystemCalls = this.systemCalls;
             this.factory.DeviationProvider = this.deviationProvider;

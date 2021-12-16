@@ -3,7 +3,6 @@ namespace NaturalMouseMotionSharp.Support.MouseMotion
     using System;
     using System.Collections.Generic;
     using System.Drawing;
-    using System.Linq;
     using Api;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
@@ -11,7 +10,7 @@ namespace NaturalMouseMotionSharp.Support.MouseMotion
 
     public class MovementFactory
     {
-        private  readonly ILogger log;
+        private readonly ILogger log;
         private readonly IOvershootManager overshootManager;
         private readonly Size screenSize;
         private readonly ISpeedManager speedManager;
@@ -45,7 +44,7 @@ namespace NaturalMouseMotionSharp.Support.MouseMotion
 
             if (overshoots == 0)
             {
-                log.LogDebug("No overshoots for movement from ({}, {}) -> ({}, {})", currentMousePosition.X,
+                this.log.LogDebug("No overshoots for movement from ({}, {}) -> ({}, {})", currentMousePosition.X,
                     currentMousePosition.Y, this.xDest, this.yDest);
                 movements.AddLast(new Movement(this.xDest, this.yDest, initialDistance, xDistance, yDistance,
                     mouseMovementMs, flow));
@@ -76,19 +75,24 @@ namespace NaturalMouseMotionSharp.Support.MouseMotion
 
             var remove = true;
             // Remove overshoots from the end, which are matching the readonly destination, but keep those in middle of motion.
-            foreach (var movement in movements.Reverse().ToArray().TakeWhile(_ => remove))
+            var node = movements.Last;
+            while (node != null && remove)
             {
+                var next = node.Previous;
+                var movement = node.Value;
                 if (movement.DestX == this.xDest && movement.DestY == this.yDest)
                 {
                     lastMousePositionX = movement.DestX - movement.XDistance;
                     lastMousePositionY = movement.DestY - movement.YDistance;
-                    log.LogTrace("Pruning 0-overshoot movement (Movement to target) from the end. " + movement);
-                    movements.Remove(movement);
+                    this.log.LogTrace("Pruning 0-overshoot movement (Movement to target) from the end. " + movement);
+                    movements.Remove(node);
                 }
                 else
                 {
                     remove = false;
                 }
+
+                node = next;
             }
 
             xDistance = this.xDest - lastMousePositionX;
@@ -102,10 +106,10 @@ namespace NaturalMouseMotionSharp.Support.MouseMotion
             );
             movements.AddLast(readonlyMove);
 
-            log.LogDebug("{count} movements returned for move ({}, {}) -> ({}, {})", movements.Count,
+            this.log.LogDebug("{count} movements returned for move ({}, {}) -> ({}, {})", movements.Count,
                 currentMousePosition.X,
                 currentMousePosition.Y, this.xDest, this.yDest);
-            log.LogTrace("Movements are: {} ", movements);
+            this.log.LogTrace("Movements are: {} ", movements);
 
             return movements;
         }

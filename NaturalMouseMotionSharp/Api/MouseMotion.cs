@@ -35,7 +35,6 @@ namespace NaturalMouseMotionSharp.Api
         private readonly int yDest;
         private Point mousePosition;
 
-
         ///<param name="nature"> the nature that defines how mouse is moved</param>
         ///<param name="xDest">  the x-coordinate of destination</param>
         ///<param name="yDest">  the y-coordinate of destination</param>
@@ -82,7 +81,7 @@ namespace NaturalMouseMotionSharp.Api
                 this.mousePosition.X, this.mousePosition.Y);
 
             var movementFactory = new MovementFactory(this.xDest, this.yDest, this.speedManager, this.overshootManager,
-                this.screenSize);
+                this.screenSize, this.log);
             var movements = movementFactory.CreateMovements(this.mousePosition);
             var overshoots = movements.Count - 1;
             while (this.mousePosition.X != this.xDest || this.mousePosition.Y != this.yDest)
@@ -113,8 +112,8 @@ namespace NaturalMouseMotionSharp.Api
                 this.log.LogDebug("Movement arc length computed to {} and time predicted to {} ms", distance,
                     mouseMovementMs);
 
-                /* Number of steps is calculated from the movement time and limited by minimal amount of steps
-                   (should have at least MIN_STEPS) and distance (shouldn't have more steps than pixels travelled) */
+                // Number of steps is calculated from the movement time and limited by minimal amount of steps
+                // (should have at least MIN_STEPS) and distance (shouldn't have more steps than pixels travelled)
                 var steps = (int)Math.Ceiling(Math.Min(distance,
                     Math.Max(mouseMovementMs / this.timeToStepsDivider, this.minSteps)));
 

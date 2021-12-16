@@ -15,10 +15,9 @@ namespace NaturalMouseMotionSharp.Api
             new Lazy<MouseMotionFactory>(() => new MouseMotionFactory(new DefaultRobot()),
                 LazyThreadSafetyMode.ExecutionAndPublication);
 
-        private readonly MouseMotionNature nature;
         private readonly Random random = new Random();
 
-        public MouseMotionFactory(MouseMotionNature nature) => this.nature = nature;
+        public MouseMotionFactory(MouseMotionNature nature) => this.Nature = nature;
 
         public MouseMotionFactory(IRobot robot) : this(new DefaultMouseMotionNature(robot)) { }
 
@@ -29,29 +28,29 @@ namespace NaturalMouseMotionSharp.Api
         /// <inheritdoc cref="MouseMotionNature.SystemCalls" />
         public ISystemCalls SystemCalls
         {
-            get => this.nature.SystemCalls;
-            set => this.nature.SystemCalls = value;
+            get => this.Nature.SystemCalls;
+            set => this.Nature.SystemCalls = value;
         }
 
         /// <inheritdoc cref="MouseMotionNature.DeviationProvider" />
         public IDeviationProvider DeviationProvider
         {
-            get => this.nature.DeviationProvider;
-            set => this.nature.DeviationProvider = value;
+            get => this.Nature.DeviationProvider;
+            set => this.Nature.DeviationProvider = value;
         }
 
         /// <inheritdoc cref="MouseMotionNature.NoiseProvider" />
         public INoiseProvider NoiseProvider
         {
-            get => this.nature.NoiseProvider;
-            set => this.nature.NoiseProvider = value;
+            get => this.Nature.NoiseProvider;
+            set => this.Nature.NoiseProvider = value;
         }
 
         /// <inheritdoc cref="MouseMotionNature.SpeedManager" />
         public ISpeedManager SpeedManager
         {
-            get => this.nature.SpeedManager;
-            set => this.nature.SpeedManager = value;
+            get => this.Nature.SpeedManager;
+            set => this.Nature.SpeedManager = value;
         }
 
         /// <summary>
@@ -63,8 +62,8 @@ namespace NaturalMouseMotionSharp.Api
         /// <inheritdoc cref="MouseMotionNature.MouseInfo" />
         public IMouseInfoAccessor MouseInfo
         {
-            get => this.nature.MouseInfo;
-            set => this.nature.MouseInfo = value;
+            get => this.Nature.MouseInfo;
+            set => this.Nature.MouseInfo = value;
         }
 
         /// <summary>
@@ -75,8 +74,8 @@ namespace NaturalMouseMotionSharp.Api
         /// <inheritdoc cref="MouseMotionNature.OvershootManager" />
         public IOvershootManager OvershootManager
         {
-            get => this.nature.OvershootManager;
-            set => this.nature.OvershootManager = value;
+            get => this.Nature.OvershootManager;
+            set => this.Nature.OvershootManager = value;
         }
 
         /// <summary>Builds the <see cref="MouseMotion" />, which can be executed instantly or saved for later.</summary>
@@ -88,7 +87,7 @@ namespace NaturalMouseMotionSharp.Api
         ///     where mouse was during building.)
         /// </remarks>
         public MouseMotion Build(int xDest, int yDest, ILogger log = null) =>
-            new MouseMotion(this.nature, this.random, xDest, yDest, log);
+            new MouseMotion(this.Nature, this.random, xDest, yDest, log);
 
         /// <summary>Start moving the mouse to specified location. Blocks until done.</summary>
         /// <param name="xDest">the end position x-coordinate for the mouse</param>

@@ -183,7 +183,7 @@ namespace NaturalMouseMotionSharp.Tests.Support.MouseMotion
 
             var m = Substitute.For<IOvershootManager>();
             m.GetOvershoots(Arg.Any<Flow>(), 0, 0).ReturnsForAnyArgs(points.Length);
-            m.GetOvershootAmount(0, 0, 0, 0).Returns(_ =>
+            m.GetOvershootAmount(0, 0, 0, 0).ReturnsForAnyArgs(_ =>
             {
                 var p = deque.First.Value;
                 deque.RemoveFirst();

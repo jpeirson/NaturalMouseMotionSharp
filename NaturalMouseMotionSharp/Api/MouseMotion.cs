@@ -16,10 +16,10 @@ namespace NaturalMouseMotionSharp.Api
     /// </summary>
     public class MouseMotion
     {
-        private readonly ILogger log;
         private static readonly int SleepAfterAdjustmentMs = 2;
         private readonly IDeviationProvider deviationProvider;
         private readonly int effectFadeSteps;
+        private readonly ILogger log;
         private readonly int minSteps;
         private readonly IMouseInfoAccessor mouseInfo;
         private readonly INoiseProvider noiseProvider;
@@ -77,7 +77,8 @@ namespace NaturalMouseMotionSharp.Api
         public void Move(MouseMotionObserver observer)
         {
             this.UpdateMouseInfo();
-            log.LogInformation("Starting to move mouse to ({}, {}), current position: ({}, {})", this.xDest, this.yDest,
+            this.log.LogInformation("Starting to move mouse to ({}, {}), current position: ({}, {})", this.xDest,
+                this.yDest,
                 this.mousePosition.X, this.mousePosition.Y);
 
             var movementFactory = new MovementFactory(this.xDest, this.yDest, this.speedManager, this.overshootManager,
@@ -92,7 +93,7 @@ namespace NaturalMouseMotionSharp.Api
                     // Then just re-attempt from mouse new position. (There are known JDK bugs, that can cause sending the cursor
                     // to wrong pixel)
                     this.UpdateMouseInfo();
-                    log.LogWarning("Re-populating movement array. Did not end up on target pixel.");
+                    this.log.LogWarning("Re-populating movement array. Did not end up on target pixel.");
                     movements = movementFactory.CreateMovements(this.mousePosition);
                 }
 
@@ -100,7 +101,7 @@ namespace NaturalMouseMotionSharp.Api
                 movements.RemoveFirst();
                 if (movements.Count > 0)
                 {
-                    log.LogDebug("Using overshoots ({} out of {}), aiming at ({}, {})",
+                    this.log.LogDebug("Using overshoots ({} out of {}), aiming at ({}, {})",
                         overshoots - movements.Count + 1, overshoots, movement.DestX, movement.DestY);
                 }
 
@@ -109,7 +110,7 @@ namespace NaturalMouseMotionSharp.Api
                 var flow = movement.Flow;
                 double xDistance = movement.XDistance;
                 double yDistance = movement.YDistance;
-                log.LogDebug("Movement arc length computed to {} and time predicted to {} ms", distance,
+                this.log.LogDebug("Movement arc length computed to {} and time predicted to {} ms", distance,
                     mouseMovementMs);
 
                 /* Number of steps is calculated from the movement time and limited by minimal amount of steps
@@ -149,7 +150,8 @@ namespace NaturalMouseMotionSharp.Api
                     completedYDistance += yStepSize;
                     var completedDistance = MathUtil.Hypot(completedXDistance, completedYDistance);
                     var completion = Math.Min(1, completedDistance / distance);
-                    log.LogTrace("Step: x: {} y: {} tc: {} c: {}", xStepSize, yStepSize, timeCompletion, completion);
+                    this.log.LogTrace("Step: x: {} y: {} tc: {} c: {}", xStepSize, yStepSize, timeCompletion,
+                        completion);
 
                     var noise = this.noiseProvider.GetNoise(this.random, xStepSize, yStepSize);
                     var deviation = this.deviationProvider.GetDeviation(distance, completion);
@@ -159,8 +161,8 @@ namespace NaturalMouseMotionSharp.Api
                     simulatedMouseX += xStepSize;
                     simulatedMouseY += yStepSize;
 
-                    log.LogTrace("EffectFadeMultiplier: {}", effectFadeMultiplier);
-                    log.LogTrace("SimulatedMouse: [{}, {}]", simulatedMouseX, simulatedMouseY);
+                    this.log.LogTrace("EffectFadeMultiplier: {}", effectFadeMultiplier);
+                    this.log.LogTrace("SimulatedMouse: [{}, {}]", simulatedMouseX, simulatedMouseY);
 
                     var endTime = startTime + (stepTime * (i + 1));
                     var mousePosX = MathUtil.RoundTowards(
@@ -199,9 +201,9 @@ namespace NaturalMouseMotionSharp.Api
                     // It's possible that mouse is manually moved or for some other reason.
                     // Let's start next step from pre-calculated location to prevent errors from accumulating.
                     // But print warning as this is not expected behavior.
-                    log.LogWarning("Mouse off from step endpoint (adjustment was done) " +
-                                   "x: (" + this.mousePosition.X + " -> " + movement.DestX + ") " +
-                                   "y: (" + this.mousePosition.Y + " -> " + movement.DestY + ") "
+                    this.log.LogWarning("Mouse off from step endpoint (adjustment was done) " +
+                                        "x: (" + this.mousePosition.X + " -> " + movement.DestX + ") " +
+                                        "y: (" + this.mousePosition.Y + " -> " + movement.DestY + ") "
                     );
                     this.systemCalls.SetMousePosition(movement.DestX, movement.DestY);
                     // Let's wait a bit before getting mouse info.
@@ -215,10 +217,10 @@ namespace NaturalMouseMotionSharp.Api
                     this.SleepAround(this.reactionTimeBaseMs, this.reactionTimeVariationMs);
                 }
 
-                log.LogDebug("Steps completed, mouse at " + this.mousePosition.X + " " + this.mousePosition.Y);
+                this.log.LogDebug("Steps completed, mouse at " + this.mousePosition.X + " " + this.mousePosition.Y);
             }
 
-            log.LogInformation("Mouse movement to ({}, {}) completed", this.xDest, this.yDest);
+            this.log.LogInformation("Mouse movement to ({}, {}) completed", this.xDest, this.yDest);
         }
 
 
@@ -229,10 +231,11 @@ namespace NaturalMouseMotionSharp.Api
         private void SleepAround(long sleepMin, long randomPart)
         {
             var sleepTime = sleepMin + (this.random.NextDouble() * randomPart);
-            if (log.IsEnabled(LogLevel.Trace) && sleepTime > 0)
+            if (this.log.IsEnabled(LogLevel.Trace) && sleepTime > 0)
             {
                 this.UpdateMouseInfo();
-                log.LogTrace("Sleeping at ({}, {}) for {} ms", this.mousePosition.X, this.mousePosition.Y, sleepTime);
+                this.log.LogTrace("Sleeping at ({}, {}) for {} ms", this.mousePosition.X, this.mousePosition.Y,
+                    sleepTime);
             }
 
             this.systemCalls.Sleep((long)sleepTime);

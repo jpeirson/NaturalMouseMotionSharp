@@ -1,6 +1,6 @@
 namespace NaturalMouseMotionSharp.Support
 {
-    public class DoublePoint
+    public struct DoublePoint
     {
         public static readonly DoublePoint Zero = new DoublePoint(0, 0);
 

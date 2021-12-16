@@ -9,6 +9,6 @@ namespace NaturalMouseMotionSharp.Support
 
         public DefaultMouseInfoAccessor(IRobot robot) => this.robot = robot;
 
-        public Point GetMousePosition() => this.robot.getMouseLocation();
+        public virtual Point GetMousePosition() => this.robot.GetMouseLocation();
     }
 }

@@ -2,6 +2,7 @@ namespace NaturalMouseMotionSharp.Tests
 {
     using System.Linq;
     using FluentAssertions;
+    using NaturalMouseMotionSharp.Support;
     using NUnit.Framework;
     using Support;
 

@@ -3,8 +3,8 @@ namespace NaturalMouseMotionSharp.Tests
     using System;
     using System.Linq;
     using FluentAssertions;
+    using NaturalMouseMotionSharp.Util;
     using NUnit.Framework;
-    using Util;
 
     public class FlowUtilTest
     {

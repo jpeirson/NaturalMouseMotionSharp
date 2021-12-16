@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+    <PackageReference Include="NSubstitute" Version="4.2.2" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
   </ItemGroup>
@@ -17,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Util\" />
-    <Folder Include="TestUtils\" />
     <Folder Include="ScreenAdjustedNature\" />
     <Folder Include="Support\MouseMotion\" />
   </ItemGroup>

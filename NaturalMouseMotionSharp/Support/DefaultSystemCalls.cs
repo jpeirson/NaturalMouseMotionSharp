@@ -17,7 +17,7 @@ namespace NaturalMouseMotionSharp.Support
 
         public void Sleep(long time) => Thread.Sleep(TimeSpan.FromMilliseconds(time));
 
-        public Size GetScreenSize() => this.robot.getScreenSize();
+        public Size GetScreenSize() => this.robot.GetScreenSize();
 
         /// <summary>Moves the mouse to specified pixel using the provided Robot.</summary>
         /// <remarks>
@@ -31,6 +31,6 @@ namespace NaturalMouseMotionSharp.Support
         /// </remarks>
         /// <param name="x">the x-coordinate</param>
         /// <param name="y">the y-coordinate</param>
-        public void SetMousePosition(int x, int y) => this.robot.mouseMove(x, y);
+        public void SetMousePosition(int x, int y) => this.robot.MouseMove(x, y);
     }
 }

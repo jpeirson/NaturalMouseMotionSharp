@@ -4,8 +4,8 @@ namespace NaturalMouseMotionSharp.Support
 
     public interface IRobot
     {
-        void mouseMove(int x, int y);
-        Size getScreenSize();
-        Point getMouseLocation();
+        void MouseMove(int x, int y);
+        Size GetScreenSize();
+        Point GetMouseLocation();
     }
 }

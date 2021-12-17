@@ -8,7 +8,6 @@ on:
 
 jobs:
   test:
-
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -23,6 +22,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
+        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+      env:
+        NUGET_AUTH_TOKEN: '%NUGET_AUTH_TOKEN%'
 
     - name: Restore dependencies
       run: dotnet restore
@@ -37,7 +39,9 @@ jobs:
       run: dotnet test --no-build --verbosity normal -f netcoreapp3.1
 
   pack:
+    needs: test
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v2
       with:
@@ -50,3 +54,18 @@ jobs:
       with:
         name: nupkg
         path: NaturalMouseMotionSharp/bin/Release/NaturalMouseMotionSharp.*.nupkg
+
+  publish:
+    if: ${{ github.ref_type == 'tag' }}
+    needs: pack
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: nupkg
+
+    - name: Push to NuGet
+      run: dotnet nuget push *.nupkg
+      env:
+        NUGET_AUTH_TOKEN: ${{ github.token }}

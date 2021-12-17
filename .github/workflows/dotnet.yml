@@ -73,6 +73,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
+      env:
+        NUGET_AUTH_TOKEN: '%NUGET_AUTH_TOKEN%'
 
     - name: Push to GitHub
       run: dotnet nuget push *.nupkg --skip-duplicate --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json

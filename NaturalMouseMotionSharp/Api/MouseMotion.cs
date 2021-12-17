@@ -77,7 +77,7 @@ namespace NaturalMouseMotionSharp.Api
         public void Move(MouseMotionObserver observer)
         {
             this.UpdateMouseInfo();
-            this.log.LogInformation("Starting to move mouse to ({}, {}), current position: ({}, {})", this.xDest,
+            this.log.LogInformation("Starting to move mouse to ({x1}, {y1}), current position: ({x0}, {y0})", this.xDest,
                 this.yDest,
                 this.mousePosition.X, this.mousePosition.Y);
 
@@ -101,7 +101,7 @@ namespace NaturalMouseMotionSharp.Api
                 movements.RemoveFirst();
                 if (movements.Count > 0)
                 {
-                    this.log.LogDebug("Using overshoots ({} out of {}), aiming at ({}, {})",
+                    this.log.LogDebug("Using overshoots ({i} out of {count}), aiming at ({x}, {y})",
                         overshoots - movements.Count + 1, overshoots, movement.DestX, movement.DestY);
                 }
 
@@ -110,7 +110,7 @@ namespace NaturalMouseMotionSharp.Api
                 var flow = movement.Flow;
                 double xDistance = movement.XDistance;
                 double yDistance = movement.YDistance;
-                this.log.LogDebug("Movement arc length computed to {} and time predicted to {} ms", distance,
+                this.log.LogDebug("Movement arc length computed to {d} and time predicted to {ms} ms", distance,
                     mouseMovementMs);
 
                 // Number of steps is calculated from the movement time and limited by minimal amount of steps
@@ -150,7 +150,7 @@ namespace NaturalMouseMotionSharp.Api
                     completedYDistance += yStepSize;
                     var completedDistance = MathUtil.Hypot(completedXDistance, completedYDistance);
                     var completion = Math.Min(1, completedDistance / distance);
-                    this.log.LogTrace("Step: x: {} y: {} tc: {} c: {}", xStepSize, yStepSize, timeCompletion,
+                    this.log.LogTrace("Step: x: {x} y: {y} tc: {tc} c: {c}", xStepSize, yStepSize, timeCompletion,
                         completion);
 
                     var noise = this.noiseProvider.GetNoise(this.random, xStepSize, yStepSize);
@@ -161,8 +161,8 @@ namespace NaturalMouseMotionSharp.Api
                     simulatedMouseX += xStepSize;
                     simulatedMouseY += yStepSize;
 
-                    this.log.LogTrace("EffectFadeMultiplier: {}", effectFadeMultiplier);
-                    this.log.LogTrace("SimulatedMouse: [{}, {}]", simulatedMouseX, simulatedMouseY);
+                    this.log.LogTrace("EffectFadeMultiplier: {m}", effectFadeMultiplier);
+                    this.log.LogTrace("SimulatedMouse: [{x}, {y}]", simulatedMouseX, simulatedMouseY);
 
                     var endTime = startTime + (stepTime * (i + 1));
                     var mousePosX = MathUtil.RoundTowards(
@@ -220,7 +220,7 @@ namespace NaturalMouseMotionSharp.Api
                 this.log.LogDebug("Steps completed, mouse at " + this.mousePosition.X + " " + this.mousePosition.Y);
             }
 
-            this.log.LogInformation("Mouse movement to ({}, {}) completed", this.xDest, this.yDest);
+            this.log.LogInformation("Mouse movement to ({x}, {y}) completed", this.xDest, this.yDest);
         }
 
 
@@ -234,7 +234,7 @@ namespace NaturalMouseMotionSharp.Api
             if (this.log.IsEnabled(LogLevel.Trace) && sleepTime > 0)
             {
                 this.UpdateMouseInfo();
-                this.log.LogTrace("Sleeping at ({}, {}) for {} ms", this.mousePosition.X, this.mousePosition.Y,
+                this.log.LogTrace("Sleeping at ({x}, {y}) for {ms} ms", this.mousePosition.X, this.mousePosition.Y,
                     sleepTime);
             }
 

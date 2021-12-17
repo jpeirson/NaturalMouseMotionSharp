@@ -31,12 +31,12 @@ namespace NaturalMouseMotionSharp.Demo
             }
 
             var screenSize = robot.GetScreenSize();
-            log.LogDebug("ScreenSize: {}", screenSize);
-            log.LogDebug("MouseLocation: {}", robot.GetMouseLocation());
+            log.LogDebug("ScreenSize: {size}", screenSize);
+            log.LogDebug("MouseLocation: {mouse}", robot.GetMouseLocation());
 
             for (var i = 0; i < iterations; i++)
             {
-                log.LogInformation("Iteration {} of {}", i + 1, iterations);
+                log.LogInformation("Iteration {i} of {iterations}", i + 1, iterations);
                 factory.Move((int)(factory.Random.NextDouble() * screenSize.Width),
                     (int)(factory.Random.NextDouble() * screenSize.Height), log);
             }

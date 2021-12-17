@@ -44,7 +44,7 @@ namespace NaturalMouseMotionSharp.Support.MouseMotion
 
             if (overshoots == 0)
             {
-                this.log.LogDebug("No overshoots for movement from ({}, {}) -> ({}, {})", currentMousePosition.X,
+                this.log.LogDebug("No overshoots for movement from ({x0}, {y0}) -> ({x1}, {y1})", currentMousePosition.X,
                     currentMousePosition.Y, this.xDest, this.yDest);
                 movements.AddLast(new Movement(this.xDest, this.yDest, initialDistance, xDistance, yDistance,
                     mouseMovementMs, flow));
@@ -106,10 +106,10 @@ namespace NaturalMouseMotionSharp.Support.MouseMotion
             );
             movements.AddLast(readonlyMove);
 
-            this.log.LogDebug("{count} movements returned for move ({}, {}) -> ({}, {})", movements.Count,
+            this.log.LogDebug("{count} movements returned for move ({x0}, {y0}) -> ({x1}, {y1})", movements.Count,
                 currentMousePosition.X,
                 currentMousePosition.Y, this.xDest, this.yDest);
-            this.log.LogTrace("Movements are: {} ", movements);
+            this.log.LogTrace("Movements are: {m} ", movements);
 
             return movements;
         }

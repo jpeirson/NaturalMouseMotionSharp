@@ -15,8 +15,6 @@ namespace NaturalMouseMotionSharp.Api
             new Lazy<MouseMotionFactory>(() => new MouseMotionFactory(new DefaultRobot()),
                 LazyThreadSafetyMode.ExecutionAndPublication);
 
-        private readonly Random random = new Random();
-
         public MouseMotionFactory(MouseMotionNature nature) => this.Nature = nature;
 
         public MouseMotionFactory(IRobot robot) : this(new DefaultMouseMotionNature(robot)) { }
@@ -57,7 +55,7 @@ namespace NaturalMouseMotionSharp.Api
         ///     Get or sets the random used whenever randomized behavior is needed in MouseMotion
         /// </summary>
         /// <returns>the random</returns>
-        public Random Random { get; set; }
+        public Random Random { get; set; } = new Random();
 
         /// <inheritdoc cref="MouseMotionNature.MouseInfo" />
         public IMouseInfoAccessor MouseInfo
@@ -88,7 +86,7 @@ namespace NaturalMouseMotionSharp.Api
         ///     where mouse was during building.)
         /// </remarks>
         public MouseMotion Build(int xDest, int yDest, ILogger log = null) =>
-            new MouseMotion(this.Nature, this.random, xDest, yDest, log);
+            new MouseMotion(this.Nature, this.Random, xDest, yDest, log);
 
         /// <summary>Start moving the mouse to specified location. Blocks until done.</summary>
         /// <param name="xDest">the end position x-coordinate for the mouse</param>

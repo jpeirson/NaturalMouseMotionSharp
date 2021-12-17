@@ -1,14 +1,39 @@
 namespace NaturalMouseMotionSharp.Support
 {
-    using System;
     using System.Drawing;
+    using System.Runtime.InteropServices;
+    using Native;
 
     internal class DefaultWindowsRobot : IRobot
     {
-        public void MouseMove(int x, int y) => throw new NotImplementedException();
+        public void MouseMove(int x, int y)
+        {
+            if (!NativeWinMethods.SetCursorPos(x, y))
+            {
+                throw Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+            }
+        }
 
-        public Size GetScreenSize() => throw new NotImplementedException();
+        public Size GetScreenSize()
+        {
+            NativeWinMethods.DEVMODE devMode = default;
+            devMode.dmSize = (short)Marshal.SizeOf(devMode);
+            if (!NativeWinMethods.EnumDisplaySettings(null, NativeWinMethods.ENUM_CURRENT_SETTINGS, ref devMode))
+            {
+                throw Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+            }
 
-        public Point GetMouseLocation() => throw new NotImplementedException();
+            return new Size(devMode.dmPelsWidth, devMode.dmPelsHeight);
+        }
+
+        public Point GetMouseLocation()
+        {
+            if (!NativeWinMethods.GetCursorPos(out var lpPoint))
+            {
+                throw Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+            }
+
+            return new Point(lpPoint.X, lpPoint.Y);
+        }
     }
 }

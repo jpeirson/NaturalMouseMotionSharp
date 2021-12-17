@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net462;netcoreapp3.1</TargetFrameworks>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,12 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NaturalMouseMotionSharp\NaturalMouseMotionSharp.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Util\" />
-    <Folder Include="ScreenAdjustedNature\" />
-    <Folder Include="Support\MouseMotion\" />
   </ItemGroup>
 
 </Project>

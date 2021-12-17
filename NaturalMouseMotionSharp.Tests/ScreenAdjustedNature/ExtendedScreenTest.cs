@@ -1,13 +1,11 @@
 namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
 {
-    using System;
     using System.Drawing;
     using System.Linq;
     using Api;
     using FluentAssertions;
     using NaturalMouseMotionSharp.Support;
     using NSubstitute;
-    using NSubstitute.ExceptionExtensions;
     using NUnit.Framework;
     using TestUtils;
 
@@ -20,9 +18,6 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
         public void Setup()
         {
             var robot = Substitute.For<IRobot>();
-            robot.GetMouseLocation().ThrowsForAnyArgs<NotImplementedException>();
-            robot.GetScreenSize().ThrowsForAnyArgs<NotImplementedException>();
-            robot.WhenForAnyArgs(x => x.MouseMove(0, 0)).Do(_ => throw new NotImplementedException());
 
             this.factory = new MouseMotionFactory(robot)
             {

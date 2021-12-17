@@ -4,6 +4,9 @@ namespace NaturalMouseMotionSharp.Support
     using System.Drawing;
     using System.Runtime.InteropServices;
 
+    /// <summary>
+    ///     Default <see cref="IRobot" /> implementation that works on Windows (non-headless) and Linux (non-headless).
+    /// </summary>
     public class DefaultRobot : IRobot
     {
         private readonly IRobot platform;

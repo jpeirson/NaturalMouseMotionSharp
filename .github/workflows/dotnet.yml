@@ -22,9 +22,7 @@ jobs:
         dotnet-version: 3.1.x
 
     - name: Restore dependencies
-      run: |
-        dotnet tool restore
-        dotnet restore
+      run: dotnet restore
 
     - name: Build
       run: dotnet build --no-restore

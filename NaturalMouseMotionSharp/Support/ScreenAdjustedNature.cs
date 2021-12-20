@@ -2,6 +2,8 @@ namespace NaturalMouseMotionSharp.Support
 {
     using System;
     using System.Drawing;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Api;
 
     /// <summary>
@@ -79,10 +81,19 @@ namespace NaturalMouseMotionSharp.Support
 
             public void Sleep(long time) => this.underlying.Sleep(time);
 
+            public Task SleepAsync(long time, CancellationToken cancellation = default) =>
+                this.underlying.SleepAsync(time, cancellation);
+
             public Size GetScreenSize() => this.owner.screenSize;
+
+            public Task<Size> GetScreenSizeAsync(CancellationToken cancellation = default) =>
+                Task.FromResult(this.owner.screenSize);
 
             public void SetMousePosition(int x, int y) =>
                 this.underlying.SetMousePosition(x + this.owner.offset.X, y + this.owner.offset.Y);
+
+            public Task SetMousePositionAsync(int x, int y, CancellationToken cancellation = default) =>
+                this.underlying.SetMousePositionAsync(x + this.owner.offset.X, y + this.owner.offset.Y, cancellation);
         }
     }
 }

@@ -2,6 +2,7 @@ namespace NaturalMouseMotionSharp.Api
 {
     using System;
     using System.Threading;
+    using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
     using Support;
 
@@ -94,5 +95,15 @@ namespace NaturalMouseMotionSharp.Api
         /// <param name="log"> Optional logger for tracing activity</param>
         /// <exception cref="ThreadInterruptedException">if something interrupts the thread.</exception>
         public void Move(int xDest, int yDest, ILogger log = null) => this.Build(xDest, yDest, log).Move();
+
+        /// <summary>Start moving the mouse to specified location. Does not block.</summary>
+        /// <param name="xDest">the end position x-coordinate for the mouse</param>
+        /// <param name="yDest">the end position y-coordinate for the mouse</param>
+        /// <param name="log"> Optional logger for tracing activity</param>
+        /// <param name="cancellation">Supports cancellation</param>
+        /// <returns>A task that completes when the mouse movement completes.</returns>
+        /// <exception cref="OperationCanceledException">if something interrupts the thread.</exception>
+        public Task MoveAsync(int xDest, int yDest, ILogger log, CancellationToken cancellation = default) =>
+            this.Build(xDest, yDest, log).MoveAsync(cancellation);
     }
 }

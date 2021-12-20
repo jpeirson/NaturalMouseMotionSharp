@@ -2,6 +2,8 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
 {
     using System.Drawing;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Api;
     using FluentAssertions;
     using NaturalMouseMotionSharp.Support;
@@ -37,6 +39,17 @@ namespace NaturalMouseMotionSharp.Tests.ScreenAdjustedNature
         public void TestScreenSizeIsExtended()
         {
             this.factory.Move(1800, 1500);
+
+            var moves = this.mouse.GetMouseMovements();
+            moves[0].Should().Be(new Point(100, 100));
+            moves.Last().Should().Be(new Point(1799, 1499));
+        }
+
+        [Test]
+        public async Task TestScreenSizeIsExtendedAsync()
+        {
+            using var cts = new CancellationTokenSource(15000);
+            await this.factory.MoveAsync(1800, 1500, null, cts.Token);
 
             var moves = this.mouse.GetMouseMovements();
             moves[0].Should().Be(new Point(100, 100));

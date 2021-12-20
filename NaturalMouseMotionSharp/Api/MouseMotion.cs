@@ -3,6 +3,7 @@ namespace NaturalMouseMotionSharp.Api
     using System;
     using System.Drawing;
     using System.Threading;
+    using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
     using Support;
@@ -60,7 +61,6 @@ namespace NaturalMouseMotionSharp.Api
             this.overshootManager = nature.OvershootManager;
         }
 
-
         /// <summary>
         ///     Blocking call, starts to move the cursor to the specified location from where it currently is.
         /// </summary>
@@ -70,14 +70,51 @@ namespace NaturalMouseMotionSharp.Api
             {
             });
 
+        /// <summary>
+        ///     Async call, starts to move the cursor to the specified location from where it currently is.
+        /// </summary>
+        /// <param name="cancellation">Supports cancellation</param>
+        /// <returns>A task that completes when the mouse movement completes.</returns>
+        /// <exception cref="OperationCanceledException"> when interrupted</exception>
+        public Task MoveAsync(CancellationToken cancellation = default) =>
+            this.MoveAsync((x, y) =>
+            {
+            }, cancellation);
 
         /// <summary>Blocking call, starts to move the cursor to the specified location from where it currently is.</summary>
         /// <param name="observer">Provide observer if you are interested receiving the location of mouse on every step</param>
         /// <exception cref="ThreadInterruptedException"> when interrupted</exception>
-        public void Move(MouseMotionObserver observer)
+        public void Move(MouseMotionObserver observer) => this.Move(observer, CancellationToken.None, true)
+            .ConfigureAwait(false).GetAwaiter().GetResult();
+
+        /// <summary>Async call, starts to move the cursor to the specified location from where it currently is.</summary>
+        /// <param name="observer">Provide observer if you are interested receiving the location of mouse on every step</param>
+        /// <param name="cancellation">Supports cancellation</param>
+        /// <returns>A task that completes when the mouse movement completes.</returns>
+        /// <exception cref="OperationCanceledException"> when interrupted</exception>
+        public Task MoveAsync(MouseMotionObserver observer, CancellationToken cancellation = default) =>
+            this.Move(observer, cancellation, false);
+
+        /// <summary>
+        ///     Implements both sync and async versions of <c>Move</c>. If <paramref name="sync" /> is true,
+        ///     then this method is guaranteed to return an already-completed task.
+        /// </summary>
+        /// <remarks>
+        ///     See
+        ///     <a
+        ///         href="https://docs.microsoft.com/en-us/archive/msdn-magazine/2015/july/async-programming-brownfield-async-development#the-flag-argument-hack">
+        ///         the
+        ///         flag argument hack
+        ///     </a>
+        ///     .
+        /// </remarks>
+        private async Task Move(MouseMotionObserver observer, CancellationToken cancellation, bool sync)
         {
+            cancellation.ThrowIfCancellationRequested();
+
             this.UpdateMouseInfo();
-            this.log.LogInformation("Starting to move mouse to ({x1}, {y1}), current position: ({x0}, {y0})", this.xDest,
+            this.log.LogInformation("Starting to move mouse to ({x1}, {y1}), current position: ({x0}, {y0})",
+                this.xDest,
                 this.yDest,
                 this.mousePosition.X, this.mousePosition.Y);
 
@@ -87,6 +124,8 @@ namespace NaturalMouseMotionSharp.Api
             var overshoots = movements.Count - 1;
             while (this.mousePosition.X != this.xDest || this.mousePosition.Y != this.yDest)
             {
+                cancellation.ThrowIfCancellationRequested();
+
                 if (movements.Count == 0)
                 {
                     // This shouldn't usually happen, but it's possible that somehow we won't end up on the target,
@@ -135,6 +174,8 @@ namespace NaturalMouseMotionSharp.Api
 
                 for (var i = 0; i < steps; i++)
                 {
+                    cancellation.ThrowIfCancellationRequested();
+
                     // All steps take equal amount of time. This is a value from 0...1 describing how far along the process is.
                     var timeCompletion = i / (double)steps;
 
@@ -182,16 +223,29 @@ namespace NaturalMouseMotionSharp.Api
                     mousePosX = this.LimitByScreenWidth(mousePosX);
                     mousePosY = this.LimitByScreenHeight(mousePosY);
 
-                    this.systemCalls.SetMousePosition(
-                        mousePosX,
-                        mousePosY
-                    );
+                    if (sync)
+                    {
+                        // ReSharper disable once MethodHasAsyncOverloadWithCancellation
+                        // intentional sync usage
+                        this.systemCalls.SetMousePosition(
+                            mousePosX,
+                            mousePosY
+                        );
+                    }
+                    else
+                    {
+                        await this.systemCalls.SetMousePositionAsync(
+                            mousePosX,
+                            mousePosY,
+                            cancellation
+                        ).ConfigureAwait(false);
+                    }
 
                     // Allow other action to take place or just observe, we'll later compensate by sleeping less.
                     observer(mousePosX, mousePosY);
 
                     var timeLeft = endTime - this.systemCalls.CurrentTimeMillis();
-                    this.SleepAround(Math.Max(timeLeft, 0), 0);
+                    await this.SleepAround(Math.Max(timeLeft, 0), 0, sync, cancellation).ConfigureAwait(false);
                 }
 
                 this.UpdateMouseInfo();
@@ -205,16 +259,29 @@ namespace NaturalMouseMotionSharp.Api
                                         "x: (" + this.mousePosition.X + " -> " + movement.DestX + ") " +
                                         "y: (" + this.mousePosition.Y + " -> " + movement.DestY + ") "
                     );
-                    this.systemCalls.SetMousePosition(movement.DestX, movement.DestY);
+
+                    if (sync)
+                    {
+                        // ReSharper disable once MethodHasAsyncOverloadWithCancellation
+                        // intentional sync usage
+                        this.systemCalls.SetMousePosition(movement.DestX, movement.DestY);
+                    }
+                    else
+                    {
+                        await this.systemCalls.SetMousePositionAsync(movement.DestX, movement.DestY, cancellation)
+                            .ConfigureAwait(false);
+                    }
+
                     // Let's wait a bit before getting mouse info.
-                    this.SleepAround(SleepAfterAdjustmentMs, 0);
+                    await this.SleepAround(SleepAfterAdjustmentMs, 0, sync, cancellation).ConfigureAwait(false);
                     this.UpdateMouseInfo();
                 }
 
                 if (this.mousePosition.X != this.xDest || this.mousePosition.Y != this.yDest)
                 {
                     // We are dealing with overshoot, let's sleep a bit to simulate human reaction time.
-                    this.SleepAround(this.reactionTimeBaseMs, this.reactionTimeVariationMs);
+                    await this.SleepAround(this.reactionTimeBaseMs, this.reactionTimeVariationMs, sync, cancellation)
+                        .ConfigureAwait(false);
                 }
 
                 this.log.LogDebug("Steps completed, mouse at " + this.mousePosition.X + " " + this.mousePosition.Y);
@@ -223,13 +290,14 @@ namespace NaturalMouseMotionSharp.Api
             this.log.LogInformation("Mouse movement to ({x}, {y}) completed", this.xDest, this.yDest);
         }
 
-
         private int LimitByScreenWidth(int value) => Math.Max(0, Math.Min(this.screenSize.Width - 1, value));
 
         private int LimitByScreenHeight(int value) => Math.Max(0, Math.Min(this.screenSize.Height - 1, value));
 
-        private void SleepAround(long sleepMin, long randomPart)
+        private async Task SleepAround(long sleepMin, long randomPart, bool sync, CancellationToken cancellation)
         {
+            cancellation.ThrowIfCancellationRequested();
+
             var sleepTime = sleepMin + (this.random.NextDouble() * randomPart);
             if (this.log.IsEnabled(LogLevel.Trace) && sleepTime > 0)
             {
@@ -238,7 +306,16 @@ namespace NaturalMouseMotionSharp.Api
                     sleepTime);
             }
 
-            this.systemCalls.Sleep((long)sleepTime);
+            if (sync)
+            {
+                // ReSharper disable once MethodHasAsyncOverloadWithCancellation
+                // intentional sync usage
+                this.systemCalls.Sleep((long)sleepTime);
+            }
+            else
+            {
+                await this.systemCalls.SleepAsync((long)sleepTime, cancellation).ConfigureAwait(false);
+            }
         }
 
         private void UpdateMouseInfo() => this.mousePosition = this.mouseInfo.GetMousePosition();

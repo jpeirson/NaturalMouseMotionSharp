@@ -11,8 +11,8 @@ namespace NaturalMouseMotionSharp.Util
         ///     Low speed, variating flow, lots of noise in movement.
         /// </summary>
         /// <returns>the factory</returns>
-        public static MouseMotionFactory CreateGrannyMotionFactory(IRobot robot) =>
-            CreateGrannyMotionFactory(new DefaultMouseMotionNature(robot));
+        public static MouseMotionFactory CreateGrannyMotionFactory() =>
+            CreateGrannyMotionFactory(new DefaultMouseMotionNature());
 
         /// <summary>
         ///     <h1>Stereotypical granny using a computer with non-optical mouse from the 90s.</h1>
@@ -53,11 +53,10 @@ namespace NaturalMouseMotionSharp.Util
         ///     <h1>Robotic fluent movement.</h1>
         ///     Custom speed, constant movement, no mistakes, no overshoots.
         /// </summary>
-        /// <param name="robot">Automation object</param>
         /// <param name="motionTimeMsPer100Pixels">approximate time a movement takes per 100 pixels of travelling</param>
         /// <returns>the factory</returns>
-        public static MouseMotionFactory CreateDemoRobotMotionFactory(IRobot robot, long motionTimeMsPer100Pixels) =>
-            CreateDemoRobotMotionFactory(new DefaultMouseMotionNature(robot), motionTimeMsPer100Pixels);
+        public static MouseMotionFactory CreateDemoRobotMotionFactory(long motionTimeMsPer100Pixels) =>
+            CreateDemoRobotMotionFactory(new DefaultMouseMotionNature(), motionTimeMsPer100Pixels);
 
         /// <summary>
         ///     <h1>Robotic fluent movement.</h1>
@@ -90,8 +89,8 @@ namespace NaturalMouseMotionSharp.Util
         ///     Quick movement, low noise, some deviation, lots of overshoots.
         /// </summary>
         /// <returns>the factory</returns>
-        public static MouseMotionFactory CreateFastGamerMotionFactory(IRobot robot) =>
-            CreateFastGamerMotionFactory(new DefaultMouseMotionNature(robot));
+        public static MouseMotionFactory CreateFastGamerMotionFactory() =>
+            CreateFastGamerMotionFactory(new DefaultMouseMotionNature());
 
         /// <summary>
         ///     <h1>Gamer with fast reflexes and quick mouse movements.</h1>
@@ -127,8 +126,8 @@ namespace NaturalMouseMotionSharp.Util
         ///     medium noise, medium speed, medium noise and deviation.
         /// </summary>
         /// <returns>the factory</returns>
-        public static MouseMotionFactory CreateAverageComputerUserMotionFactory(IRobot robot) =>
-            CreateAverageComputerUserMotionFactory(new DefaultMouseMotionNature(robot));
+        public static MouseMotionFactory CreateAverageComputerUserMotionFactory() =>
+            CreateAverageComputerUserMotionFactory(new DefaultMouseMotionNature());
 
         /// <summary>
         ///     <h1>Standard computer user with average speed and movement mistakes</h1>

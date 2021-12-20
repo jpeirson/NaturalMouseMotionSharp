@@ -15,6 +15,10 @@ namespace NaturalMouseMotionSharp.Support
         private readonly Point offset;
         private readonly Size screenSize;
 
+        public ScreenAdjustedNature(int x, int y, int x2, int y2) : this(new DefaultRobot(), x, y, x2, y2)
+        {
+        }
+
         public ScreenAdjustedNature(IRobot robot, int x, int y, int x2, int y2) :
             this(robot, new Size(x2 - x, y2 - y), new Point(x, y))
         {
@@ -22,6 +26,11 @@ namespace NaturalMouseMotionSharp.Support
             {
                 throw new ArgumentException("Invalid range " + x + " " + y + " " + x2 + " " + y2);
             }
+        }
+
+        public ScreenAdjustedNature(Size screenSize, Point mouseOffset)
+            : this(new DefaultRobot(), screenSize, mouseOffset)
+        {
         }
 
         public ScreenAdjustedNature(IRobot robot, Size screenSize, Point mouseOffset)

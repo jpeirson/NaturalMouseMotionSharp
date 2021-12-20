@@ -18,6 +18,10 @@ namespace NaturalMouseMotionSharp.Api
 
         public MouseMotionFactory(MouseMotionNature nature) => this.Nature = nature;
 
+        public MouseMotionFactory() : this(new DefaultRobot())
+        {
+        }
+
         public MouseMotionFactory(IRobot robot) : this(new DefaultMouseMotionNature(robot)) { }
 
         /// Get the default factory implementation.

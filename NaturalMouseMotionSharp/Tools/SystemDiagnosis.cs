@@ -10,10 +10,16 @@ namespace NaturalMouseMotionSharp.Tools
         /// <summary>
         ///     Runs a diagnosis with default configuration, by setting mouse all over your screen and expecting to receive
         ///     correct coordinates back.
-        ///     If java.awt.Robot cannot be constructed, then new RuntimeException is thrown.
-        ///     If no issues are found, then this method completes without throwing an error, otherwise IllegalStateException is
-        ///     thrown.
         /// </summary>
+        /// <exception cref="ApplicationException">If a <see cref="DefaultRobot" /> cannot be constructed</exception>
+        /// <exception cref="InvalidOperationException">An error occurred moving the mouse</exception>
+        public static void ValidateMouseMovement() => ValidateMouseMovement(new DefaultRobot());
+
+        /// <summary>
+        ///     Runs a diagnosis with default configuration, by setting mouse all over your screen and expecting to receive
+        ///     correct coordinates back.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">An error occurred moving the mouse</exception>
         public static void ValidateMouseMovement(IRobot robot)
         {
             try
@@ -33,6 +39,7 @@ namespace NaturalMouseMotionSharp.Tools
         /// </summary>
         /// <param name="system">a <see cref="ISystemCalls" /> class which is used for setting the mouse position</param>
         /// <param name="accessor">a <see cref="IMouseInfoAccessor" /> which is used for querying mouse position</param>
+        /// <exception cref="InvalidOperationException">An error occurred moving the mouse</exception>
         public static void ValidateMouseMovement(ISystemCalls system, IMouseInfoAccessor accessor)
         {
             var dimension = system.GetScreenSize();

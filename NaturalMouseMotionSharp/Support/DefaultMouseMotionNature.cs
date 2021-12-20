@@ -11,6 +11,10 @@ namespace NaturalMouseMotionSharp.Support
         public const int DefaultReactionTimeBaseMs = 20;
         public const int DefaultReactionTimeVariationMs = 120;
 
+        public DefaultMouseMotionNature(ISystemCalls systemCalls) : this(new DefaultRobot(), systemCalls)
+        {
+        }
+
         public DefaultMouseMotionNature(IRobot robot, ISystemCalls systemCalls) :
             this(systemCalls, new DefaultMouseInfoAccessor(robot))
         {
@@ -35,6 +39,10 @@ namespace NaturalMouseMotionSharp.Support
             this.ReactionTimeBaseMs = DefaultReactionTimeBaseMs;
             this.ReactionTimeVariationMs = DefaultReactionTimeVariationMs;
             this.TimeToStepsDivider = DefaultTimeToStepsDivider;
+        }
+
+        public DefaultMouseMotionNature() : this(new DefaultRobot())
+        {
         }
 
         public DefaultMouseMotionNature(IRobot robot) :

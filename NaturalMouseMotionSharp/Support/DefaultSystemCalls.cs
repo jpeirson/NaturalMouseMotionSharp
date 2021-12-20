@@ -16,6 +16,13 @@ namespace NaturalMouseMotionSharp.Support
         private readonly IRobot robot;
 
         /// <summary>
+        ///     Creates a new instance wrapped around a default robot.
+        /// </summary>
+        public DefaultSystemCalls() : this(new DefaultRobot())
+        {
+        }
+
+        /// <summary>
         ///     Creates a new instance wrapped around the given robot.
         /// </summary>
         /// <param name="robot">A <see cref="IRobot" /></param>
